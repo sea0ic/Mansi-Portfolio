@@ -1,0 +1,11 @@
+
+RewriteEngine On
+
+# Redirect direct .html URLs to clean URLs
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+RewriteRule ^ %1 [R=301,L,NE]
+
+# Serve matching HTML files at clean URLs
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+?)/?$ $1.html [L]
