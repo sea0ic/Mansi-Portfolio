@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="description" content="Mansi Bhavsar - Building at the intersection of tech, education, and social impact">
+  <title>Mansi Bhavsar | Portfolio</title>
+  <link rel="icon" href="/favicon.ico" type="images/mp1.jpeg">
+
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="phone.css?v=11">
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+
+  <!-- Mobile Menu Toggle -->
+  <button class="mobile-menu-toggle" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <header>
+    <nav class="navbar">
+      <div class="logo-container">
+        <div class="logo">MB</div>
+        <div class="social-links">
+            
+         </a>
+          <a href="https://www.linkedin.com/in/seaci/" target="_blank" rel="noopener" class="social-icon" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+          </a>
+           <a href="https://github.com/sea0ic" target="_blank" rel="noopener" class="social-icon" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/sea0ic/" target="_blank" rel="noopener" class="social-icon" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/>
+              <path d="M12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+          <a href="https://www.youtube.com/@seaci" target="_blank" rel="noopener" class="social-icon" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="#about">ABOUT</a></li>
+        <li><a href="techPro.html">TECH</a></li>
+        <li><a href="socialPro.html">COMMUNITY</a></li>
+        <li><a href="#contact">CONTACT</a></li>
+        <li><a href="../scholarship/consultation.html" class="nav-book-btn">CONSULTATION</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero-name">
+    <h1 class="hero-title" id="typing-text"></h1>
+    <div class="hero-subtitle">
+      <p>Learning to Build & Sell For Social Good</p>
+    </div>
+    <div class="scroll-indicator" aria-hidden="true">↓</div>
+  </section>
+
+  <section id="about" class="about-section">
+    <div class="about-container">
+      <!-- Empty spacer for desktop layout -->
+      <div class="about-spacer"></div>
+      
+      <!-- Spotify-style music player -->
+      <div class="spotify-card">
+        <div class="album-cover">
+          <img src="images/mp4.jpeg" alt="Mansi Bhavsar" class="cover-image" loading="lazy">
+        </div>
+        
+        <div class="song-details">
+          <div class="song-title">Ceilings</div>
+          <div class="song-artist">Lizzy McAlpine</div>
+        </div>
+        
+        <div class="player-controls">
+          <button class="play-btn" id="playButton" aria-label="Play/Pause">
+            <svg class="play-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path fill="currentColor" d="M8 5v14l11-7z"/>
+            </svg>
+            <svg class="pause-icon" viewBox="0 0 24 24" width="20" height="20" style="display: none;" aria-hidden="true">
+              <path fill="currentColor" d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+            </svg>
+          </button>
+          
+          <div class="progress-container">
+            <div class="progress-bar" id="progressBar" role="progressbar" aria-label="Song progress">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="time-display">
+              <span id="currentTime">0:00</span>
+              <span id="duration">3:20</span>
+            </div>
+          </div>
+        </div>
+        
+        <audio id="audioPlayer" preload="metadata">
+          <source src="ceilings.mp3" type="audio/mpeg">
+        </audio>
+        
+        <p class="music-invite">listen to one of my fav songs while you scroll ^^</p>
+      </div>
+      
+      <!-- Bio content -->
+      <div class="about-content">
+        <h2 class="about-greeting">Hey!</h2>
+        <div class="about-text">
+          <p>I'm Mansi :><br> I work at the intersection of tech, business, and social impact . I combine strategic thinking with empathy to build solutions that connect people and create meaningful change.</p>
+          <p>Currently based in Indonesia, exploring opportunities in software development.</p>
+        </div>
+        <div class="quote-section fade-in-up">
+          <blockquote>
+            <p>"HAVE COURAGE & BE KIND."</p>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="split-path" id="split">
+    <div class="path-container">
+      <a href="techPro.html" class="path-card tech-path">
+        <div class="path-content">
+          <h2>CODE & STUFF</h2>
+          <p>Things I've built with Code. it works (mostly) hehe</p>
+          <span class="path-arrow">→</span>
+        </div>
+      </a>
+      
+      <a href="socialPro.html" class="path-card social-path">
+        <div class="path-content">
+          <h2>BEYOND CODE</h2>
+          <p>Social impact and community projects I've led.</p>
+          <span class="path-arrow">→</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section id="tech" class="content-section tech-section">
+    <div class="section-header fade-in-up">
+      <h2 class="section-title">TECH PROJECTS</h2>
+    </div>
+    
+    <div class="projects-grid">
+      <article class="project-card fade-in-up" data-link="../techProjects/DineFlow.html">
+        <h3>DineFlow DBMS</h3>
+        <p>Built a Database Management System for a payment-first restaurant, using the project to learn the fundamentals of data management and the logic behind structuring orders, transactions, and relational data.</p>
+        <div class="tech-tags">
+          <span class="tag">MySQL</span>
+          <span class="tag">PowerDesigner</span>
+        </div>
+      </article>
+
+      <article class="project-card fade-in-up" data-link="../techProjects/uniqlo.html">
+        <h3>Uniqlo Indonesia: Does Premium-Only Distribution Still Make Sense?</h3>
+        <p>A strategic analysis of UNIQLO Indonesia's distribution paradox — where 'Made for All' meets 76 premium mall storefronts.</p>
+        <!--<div class="tech-tags">
+          <span class="tag"></span>
+          <span class="tag"></span>
+          <span class="tag"></span>
+        </div>-->
+      </article>
+
+      <article class="project-card fade-in-up" data-link="../techProjects/IndiaMart.html">
+        <h3>BuyerShield AI for IndiaMart: Product Strategy</h3>
+        <p>A LLM product strategy designed to solve IndiaMart's Trust Crisis.</p>
+        <div class="tech-tags">
+          <span class="tag">User Research</span>
+          <span class="tag">System Design</span>
+        </div>
+        
+      </article>
+    </div>
+    
+    <div class="see-more-container fade-in-up">
+      <a href="techPro.html" class="btn see-more-btn">
+        <span>SEE MORE >>></span>
+      </a>
+    </div>
+  </section>
+
+  <section id="social" class="content-section social-section">
+    <div class="section-header fade-in-up">
+      <h2 class="section-title">SOCIAL PROJECTS</h2>
+    </div>
+    
+    <div class="projects-grid">   
+      <article class="project-card fade-in-up" data-link="../socialProjects/sonderia.html">
+        <h3>Sonderia</h3>
+        <p>Led a UNESCO-APCEIU–funded Global Citizenship project, where we produced and released an animated film on cultural diversity and facilitated a virtual cultural exchange program connecting children across borders to promote tolerance and inclusivity.</p>
+        <div class="impact-stats">
+          <span class="stat">18 countries participated</span>
+        </div>
+      </article>
+
+      <article class="project-card fade-in-up" data-link="../socialProjects/lions-club.html">
+        <h3>Lions Club Initiatives</h3>
+        <p>Led and coordinated diverse community service initiatives, ranging from free eye and medical checkups to educational programs through films, and workshops to support social welfare.</p>
+        <div class="impact-stats">
+          <span class="stat">1500+ people served</span>
+        </div>
+      </article>
+
+      <article class="project-card fade-in-up" data-link="../socialProjects/speaker.html">
+        <h3>Speaker & Panelist</h3>
+        <p>Served as an invited speaker and panelist across various platforms, sharing perspectives on education, cultural diversity, economics, and broader social themes to support informed dialogue and community learning.</p>
+        <div class="impact-stats">
+          <span class="stat">5+ speaking engagements</span>
+        </div>
+      </article>
+    </div>
+    
+    <div class="see-more-container fade-in-up">
+      <a href="socialPro.html" class="btn see-more-btn">
+        <span>SEE MORE >>></span>
+      </a>
+    </div>
+  </section>
+
+  <section id="milestones" class="milestones-section">
+    <div class="section-header fade-in-up">
+      <h2 class="section-title">MILESTONES</h2>
+    </div>
+
+    <div class="timeline-horizontal-wrapper">
+      <div class="timeline-horizontal-track">
+        
+        <div class="timeline-item-h">
+          <div class="item-year">Jun 2023</div>
+          <div class="item-dot"></div>
+          <div class="item-content">
+            <h3>UNESCO Grant Recipient</h3>
+            <p>Received a grant to fund Project Sonderia</p>
+          </div>
+        </div>
+
+        <div class="timeline-item-h">
+          <div class="item-year">Jun 2023</div>
+          <div class="item-dot"></div>
+          <div class="item-content">
+            <h3>Founded Sonderia</h3>
+            <p>Global citizenship initiative funded</p>
+          </div>
+        </div>
+
+        <div class="timeline-item-h">
+          <div class="item-year">Jul 2023</div>
+          <div class="item-dot"></div>
+          <div class="item-content">
+            <h3>KNB Scholarship Awardee</h3>
+            <p>Awarded with a fully funded Scholarship by the Government of Indonesia.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item-h">
+          <div class="item-year">Aug 2024</div>
+          <div class="item-dot"></div>
+          <div class="item-content">
+            <h3>Bahasa Indonesia C1 Certified</h3>
+            <p>Achieved C1 proficiency in Bahasa Indonesia.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item-h">
+          <div class="item-year">Sept 2024</div>
+          <div class="item-dot"></div>
+          <div class="item-content">
+            <h3>University</h3>
+            <p>Started my undergraduate studies in Informatics Engineering</p>
+          </div>
+        </div>
+
+        <div class="timeline-item-h">
+          <div class="item-year">Jan 2025</div>
+          <div class="item-dot"></div>
+          <div class="item-content">
+            <h3>President, Lions Club Surabaya Wijaya</h3>
+            <p>Appointed President to lead service projects initiatives in Surabaya.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item-h">
+          <div class="item-year">Oct 2025</div>
+          <div class="item-dot"></div>
+          <div class="item-content">
+            <h3>Youth Mentor</h3>
+            <p>Selected as a mentor at Youth Break the Boundaries, guiding students in developing social impact projects.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact-section">
+    <div class="contact-content fade-in-up">
+      <h2>Get in touch.</h2>
+      <p>want to build something together? talk about an idea? or just chat about tech, business, or how to make the world a bit less chaotic? hit me up.</p>
+      
+      <div class="contact-buttons">
+        <a href="mailto:mansibhavsar.info@gmail.com" class="btn">
+          <span>EMAIL</span>
+        </a>
+        <a href="https://www.linkedin.com/in/seaci/" class="btn" target="_blank" rel="noopener">
+          <span>LINKEDIN</span>
+        </a>
+        <a href="https://www.instagram.com/sea0ic/" class="btn" target="_blank" rel="noopener">
+          <span>INSTAGRAM</span>
+        </a>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>&copy; 2026 Mansi Bhavsar. All rights reserved.</p>
+    </footer>
+  </section>
+
+  <script src="phone.js"></script>
+</body>
+</html>

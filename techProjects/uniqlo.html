@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Strategic Case Study: Uniqlo Indonesia — Does Premium-Only Distribution Still Make Sense?">
+  <title>Uniqlo Indonesia | Case Study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Space+Grotesk:wght@700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body {
+      font-family: "Poppins", sans-serif;
+      color: #fff;
+      background: #000;
+      overflow-x: hidden;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── STARFIELD ── */
+    #starfield {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1; background: #000;
+    }
+
+    /* ── BACK BUTTON ── */
+    .back-button {
+      position: fixed;
+      top: clamp(15px,3vw,30px);
+      left: clamp(15px,3vw,30px);
+      z-index: 1000;
+      display: flex; align-items: center; gap: 8px;
+      color: #fff; text-decoration: none;
+      font-size: clamp(11px,1.5vw,14px);
+      font-weight: 400; letter-spacing: 1px;
+      padding: clamp(10px,1.5vw,12px) clamp(14px,2.5vw,20px);
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      border-radius: 4px;
+    }
+    .back-button:hover { border-color:#fff; background:rgba(255,255,255,0.1); transform:translateX(-5px); }
+    .back-button svg { width:clamp(14px,2vw,20px); height:clamp(14px,2vw,20px); flex-shrink:0; }
+
+    /* ── QUICK NAV ── */
+    .quick-nav {
+      position: fixed; right: clamp(20px,4vw,40px); top: 50%;
+      transform: translateY(-50%);
+      z-index: 999;
+      display: flex; flex-direction: column; gap: 15px;
+    }
+    .nav-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.3);
+      background: transparent; cursor: pointer;
+      transition: all 0.3s ease; position: relative;
+    }
+    .nav-dot:hover, .nav-dot.active { border-color:#fff; background:#fff; }
+    .nav-dot::before {
+      content: attr(data-label);
+      position: absolute; right: 25px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px; letter-spacing: 1.5px;
+      opacity: 0; transition: opacity 0.3s;
+      white-space: nowrap; pointer-events: none;
+      color: rgba(255,255,255,0.7);
+    }
+    .nav-dot:hover::before { opacity: 1; }
+
+    /* ── HERO ── */
+    .hero-section {
+      min-height: clamp(500px,75vh,850px);
+      position: relative;
+      display: flex; align-items: flex-end; justify-content: center;
+      padding: clamp(80px,12vh,140px) 20px clamp(60px,10vh,100px);
+      overflow: hidden;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.9) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center; max-width: 1000px; margin: 0 auto; padding: 0 20px;
+    }
+    .hero-badge {
+      display: inline-block;
+      font-size: clamp(0.55rem,1.2vw,0.7rem);
+      letter-spacing: clamp(2px,0.5vw,4px);
+      text-transform: uppercase;
+      padding: clamp(6px,1vw,8px) clamp(14px,2.5vw,22px);
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      margin-bottom: clamp(20px,3vw,30px);
+      border-radius: 30px;
+      color: rgba(255,255,255,0.75);
+    }
+    .project-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.8rem,10vw,6.5rem);
+      font-weight: 800;
+      letter-spacing: clamp(-2px,-0.3vw,-3px);
+      line-height: 1.05;
+      margin-bottom: clamp(10px,2vw,16px);
+      background: linear-gradient(135deg, #fff 0%, #888 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .title-sub {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(1rem,2.5vw,1.5rem);
+      font-weight: 400;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: clamp(20px,3.5vw,32px);
+    }
+    .hero-meta {
+      display: flex; gap: clamp(20px,4vw,40px);
+      justify-content: center; flex-wrap: wrap;
+      margin-top: clamp(25px,4vw,40px);
+    }
+    .hero-meta-item { text-align: center; }
+    .hero-meta-label {
+      font-size: 0.65rem; letter-spacing: 2px;
+      text-transform: uppercase; opacity: 0.4;
+      margin-bottom: 4px;
+    }
+    .hero-meta-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(0.85rem,1.8vw,1rem);
+      font-weight: 700; opacity: 0.9;
+    }
+    .hero-divider {
+      width: 1px; height: 40px;
+      background: rgba(255,255,255,0.15);
+      align-self: center;
+    }
+
+    /* ── LAYOUT ── */
+    .content-wrapper {
+      max-width: 1300px; margin: 0 auto;
+      padding: 0 clamp(20px,5vw,60px) clamp(80px,12vw,120px);
+    }
+
+    /* ── OPENING CARD ── */
+    .opening-card {
+      margin: clamp(-60px,-8vw,-80px) auto clamp(70px,10vw,100px);
+      max-width: 860px;
+      position: relative; z-index: 10;
+    }
+    .opening-card-inner {
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(20px);
+      padding: clamp(30px,5vw,55px);
+      border-radius: 8px;
+    }
+    .oc-eyebrow {
+      font-size: 0.65rem; letter-spacing: 3px;
+      text-transform: uppercase; opacity: 0.4;
+      margin-bottom: clamp(18px,3vw,24px);
+    }
+    .oc-headline {
+      font-size: clamp(1.2rem,2.8vw,1.65rem);
+      font-weight: 600; line-height: 1.35;
+      margin-bottom: clamp(16px,2.5vw,22px);
+      letter-spacing: -0.3px;
+    }
+    .oc-body {
+      font-size: clamp(0.88rem,1.7vw,0.98rem);
+      line-height: 1.8; opacity: 0.8;
+    }
+    .oc-stats {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: clamp(12px,2.5vw,24px);
+      margin-top: clamp(28px,4.5vw,40px);
+      padding-top: clamp(28px,4.5vw,40px);
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .oc-stat { text-align: center; }
+    .oc-stat-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.6rem,3.5vw,2.4rem);
+      font-weight: 800; letter-spacing: -1px;
+      line-height: 1; margin-bottom: 6px;
+    }
+    .oc-stat-lbl {
+      font-size: clamp(0.6rem,1.1vw,0.7rem);
+      opacity: 0.45; letter-spacing: 1.5px; text-transform: uppercase;
+    }
+
+    /* ── SECTIONS ── */
+    section { margin-bottom: clamp(70px,12vw,120px); }
+    .section-eyebrow {
+      font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
+      opacity: 0.4; margin-bottom: clamp(12px,2vw,18px);
+    }
+    .section-title {
+      font-size: clamp(1.7rem,4vw,2.6rem);
+      font-weight: 700; letter-spacing: -1px;
+      margin-bottom: clamp(28px,5vw,50px); line-height: 1.15;
+    }
+    .section-title em {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic; font-weight: 400;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ── PARADOX TABLE ── */
+    .paradox-wrap {
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px; overflow: hidden;
+    }
+    .paradox-table { width: 100%; border-collapse: collapse; }
+    .paradox-table thead tr {
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+    .paradox-table th {
+      padding: clamp(14px,2.5vw,22px) clamp(18px,3vw,32px);
+      font-size: clamp(0.65rem,1.2vw,0.75rem);
+      letter-spacing: 2.5px; text-transform: uppercase; opacity: 0.45;
+      text-align: left; font-weight: 400;
+    }
+    .paradox-table th:first-child { border-right: 1px solid rgba(255,255,255,0.08); }
+    .paradox-table td {
+      padding: clamp(16px,2.5vw,24px) clamp(18px,3vw,32px);
+      font-size: clamp(0.85rem,1.6vw,0.95rem);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      vertical-align: top; line-height: 1.6;
+    }
+    .paradox-table td:first-child {
+      opacity: 0.9; font-weight: 500;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+    }
+    .paradox-table td:last-child { opacity: 0.65; }
+    .paradox-table tr:last-child td { border-bottom: none; }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(180px,100%),1fr));
+      gap: clamp(16px,3vw,24px);
+      margin-bottom: clamp(40px,7vw,60px);
+    }
+    .stat-card {
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: clamp(20px,3vw,30px);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.02);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .stat-card:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.04); }
+    .stat-card-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.8rem,4vw,2.6rem);
+      font-weight: 800; letter-spacing: -1.5px;
+      line-height: 1; margin-bottom: 10px;
+    }
+    .stat-card-lbl {
+      font-size: clamp(0.75rem,1.4vw,0.85rem);
+      opacity: 0.55; line-height: 1.4;
+    }
+
+    /* ── CALLOUT ── */
+    .callout {
+      border-left: 2px solid rgba(255,255,255,0.4);
+      margin: clamp(30px,5vw,50px) 0;
+      padding: clamp(18px,3vw,28px) clamp(20px,3.5vw,36px);
+      background: rgba(255,255,255,0.02);
+      border-radius: 0 6px 6px 0;
+    }
+    .callout-label {
+      font-size: 0.6rem; letter-spacing: 3px;
+      text-transform: uppercase; opacity: 0.4; margin-bottom: 10px;
+    }
+    .callout p {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(1rem,2.2vw,1.25rem);
+      line-height: 1.6; opacity: 0.85;
+    }
+
+    /* ── HYPOTHESES ── */
+    .hyp-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: clamp(20px,3vw,30px);
+    }
+    .hyp-card {
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px; padding: clamp(24px,4vw,40px);
+      background: rgba(255,255,255,0.02);
+      transition: all 0.3s;
+    }
+    .hyp-card:hover { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.04); transform: translateY(-4px); }
+    .hyp-label {
+      font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase;
+      opacity: 0.4; margin-bottom: 12px;
+    }
+    .hyp-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.2rem,2.2vw,1.5rem);
+      font-weight: 800; margin-bottom: clamp(14px,2.5vw,20px);
+      line-height: 1.2;
+    }
+    .hyp-thesis {
+      font-size: clamp(0.82rem,1.5vw,0.9rem);
+      opacity: 0.6; font-style: italic; line-height: 1.65;
+      margin-bottom: clamp(20px,3.5vw,28px);
+      padding-bottom: clamp(20px,3.5vw,28px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .hyp-points { list-style: none; }
+    .hyp-points li {
+      font-size: clamp(0.82rem,1.5vw,0.9rem);
+      opacity: 0.75; line-height: 1.65;
+      padding: clamp(8px,1.5vw,12px) 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-left: 18px; position: relative;
+    }
+    .hyp-points li:last-child { border-bottom: none; }
+    .hyp-points li::before {
+      content: '→';
+      position: absolute; left: 0;
+      opacity: 0.35; font-size: 0.8rem;
+    }
+
+    /* ── CONDITIONS TABLE ── */
+    .conditions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px,3vw,30px); }
+    .condition-block {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px; padding: clamp(24px,4vw,36px);
+      background: rgba(255,255,255,0.015);
+    }
+    .condition-block-title {
+      font-size: clamp(0.85rem,1.6vw,0.95rem);
+      font-weight: 600; margin-bottom: clamp(16px,2.5vw,22px);
+      opacity: 0.9; letter-spacing: 0.3px;
+    }
+    .condition-list { list-style: none; }
+    .condition-list li {
+      font-size: clamp(0.8rem,1.4vw,0.88rem);
+      opacity: 0.65; line-height: 1.65;
+      padding: clamp(10px,1.5vw,14px) 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-left: 22px; position: relative;
+    }
+    .condition-list li:last-child { border-bottom: none; }
+    .condition-list li::before {
+      content: '○';
+      position: absolute; left: 0;
+      font-size: 0.7rem; opacity: 0.4; top: calc(clamp(10px,1.5vw,14px) + 2px);
+    }
+
+    /* ── RECOMMENDATIONS ── */
+    .recs { display: flex; flex-direction: column; gap: clamp(24px,4vw,36px); }
+    .rec-card {
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px; overflow: hidden;
+      transition: all 0.3s;
+    }
+    .rec-card:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-3px); }
+    .rec-header {
+      display: grid; grid-template-columns: auto 1fr;
+      gap: clamp(16px,3vw,30px);
+      align-items: start;
+      padding: clamp(24px,4vw,38px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+    }
+    .rec-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem,5vw,3.5rem);
+      font-weight: 800; letter-spacing: -2px;
+      line-height: 1; opacity: 0.15;
+      align-self: center;
+    }
+    .rec-title-block {}
+    .rec-fix {
+      font-size: 0.6rem; letter-spacing: 2.5px; text-transform: uppercase;
+      opacity: 0.4; margin-bottom: 8px;
+    }
+    .rec-title {
+      font-size: clamp(1rem,2vw,1.25rem);
+      font-weight: 600; line-height: 1.3;
+    }
+    .rec-body { padding: clamp(24px,4vw,38px); }
+    .rec-body p {
+      font-size: clamp(0.85rem,1.6vw,0.95rem);
+      opacity: 0.75; line-height: 1.75; margin-bottom: 14px;
+    }
+    .rec-body p:last-child { margin-bottom: 0; }
+    .rec-metric {
+      margin-top: clamp(18px,3vw,24px);
+      padding: clamp(14px,2.5vw,20px);
+      background: rgba(255,255,255,0.03);
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    .rec-metric-label {
+      font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase;
+      opacity: 0.35; margin-bottom: 8px;
+    }
+    .rec-metric p {
+      font-size: clamp(0.8rem,1.4vw,0.85rem);
+      opacity: 0.6; margin-bottom: 0 !important; line-height: 1.6;
+    }
+
+    /* ── CONNECTION DIAGRAM ── */
+    .connection-row {
+      display: flex; gap: clamp(12px,2.5vw,20px);
+      align-items: stretch; flex-wrap: wrap;
+      margin-top: clamp(30px,5vw,50px);
+    }
+    .connection-item {
+      flex: 1; min-width: 200px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px; padding: clamp(18px,3vw,28px);
+      background: rgba(255,255,255,0.02);
+    }
+    .ci-action {
+      font-size: clamp(0.8rem,1.5vw,0.9rem);
+      font-weight: 600; margin-bottom: 8px;
+    }
+    .ci-outcome {
+      font-size: clamp(0.75rem,1.3vw,0.82rem);
+      opacity: 0.5; font-style: italic; line-height: 1.5;
+    }
+    .connection-arrow {
+      display: flex; align-items: center;
+      color: rgba(255,255,255,0.2);
+      font-size: 1.4rem; align-self: center; flex-shrink: 0;
+    }
+
+    /* ── METRICS GRID ── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px,100%),1fr));
+      gap: clamp(16px,2.5vw,24px);
+    }
+    .metric-card {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px; padding: clamp(22px,3.5vw,32px);
+      background: rgba(255,255,255,0.015);
+      transition: all 0.3s;
+    }
+    .metric-card:hover { border-color: rgba(255,255,255,0.28); background: rgba(255,255,255,0.03); }
+    .metric-card-icon { font-size: 1.5rem; margin-bottom: 14px; opacity: 0.7; }
+    .metric-card-title {
+      font-size: clamp(0.85rem,1.6vw,0.95rem);
+      font-weight: 600; margin-bottom: clamp(12px,2vw,16px);
+    }
+    .metric-list { list-style: none; }
+    .metric-list li {
+      font-size: clamp(0.78rem,1.3vw,0.85rem);
+      opacity: 0.6; line-height: 1.6;
+      padding: 6px 0 6px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      position: relative;
+    }
+    .metric-list li:last-child { border-bottom: none; }
+    .metric-list li::before {
+      content: '–'; position: absolute; left: 0; opacity: 0.35;
+    }
+
+    /* ── CONCLUSION ── */
+    .conclusion-card {
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px; padding: clamp(36px,6vw,60px);
+      background: rgba(255,255,255,0.025);
+      backdrop-filter: blur(10px);
+      max-width: 860px; margin: 0 auto;
+      text-align: center;
+    }
+    .conclusion-eyebrow {
+      font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase;
+      opacity: 0.35; margin-bottom: clamp(20px,3vw,28px);
+    }
+    .conclusion-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.4rem,3.5vw,2rem);
+      font-style: italic; font-weight: 400; line-height: 1.4;
+      margin-bottom: clamp(20px,3.5vw,30px);
+      opacity: 0.9;
+    }
+    .conclusion-body {
+      font-size: clamp(0.88rem,1.7vw,0.98rem);
+      opacity: 0.7; line-height: 1.8; margin-bottom: clamp(24px,4vw,36px);
+    }
+    .conclusion-final {
+      padding-top: clamp(24px,4vw,36px);
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .conclusion-final p {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(0.95rem,2vw,1.15rem);
+      opacity: 0.6; line-height: 1.7;
+    }
+
+    /* ── PROSE ── */
+    .prose p {
+      font-size: clamp(0.9rem,1.7vw,1rem);
+      opacity: 0.8; line-height: 1.8;
+      margin-bottom: clamp(14px,2vw,20px);
+    }
+    .prose p:last-child { margin-bottom: 0; }
+
+    /* ── FADE IN ── */
+    .fade-in { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 767px) {
+      .quick-nav { display: none; }
+      .hyp-grid, .conditions-grid { grid-template-columns: 1fr; }
+      .oc-stats { grid-template-columns: 1fr 1fr; }
+      .connection-row { flex-direction: column; }
+      .connection-arrow { transform: rotate(90deg); align-self: center; }
+      .rec-header { grid-template-columns: 1fr; }
+      .rec-number { font-size: 2rem; }
+    }
+    @media (max-width: 480px) {
+      .oc-stats { grid-template-columns: 1fr; }
+      .paradox-table th, .paradox-table td { padding: 12px 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+      .fade-in { opacity: 1; transform: none; }
+    }
+    
+    
+    .case-study-byline {
+  font-size: clamp(0.65rem, 1.2vw, 0.75rem);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: clamp(20px, 3vw, 30px);
+}
+.case-study-byline span {
+  color: rgba(255, 255, 255, 0.75);
+}
+  </style>
+</head>
+<body>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+
+  <a href="../techPro.html" class="back-button" aria-label="Back to home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    <span>BACK</span>
+  </a>
+
+  <nav class="quick-nav" aria-label="Quick navigation">
+    <button class="nav-dot active" data-label="OVERVIEW"       data-target="overview"       aria-label="Overview"></button>
+    <button class="nav-dot"        data-label="THE PARADOX"    data-target="paradox"         aria-label="The Paradox"></button>
+    <button class="nav-dot"        data-label="HYPOTHESES"     data-target="hypotheses"      aria-label="Hypotheses"></button>
+    <button class="nav-dot"        data-label="CONDITIONS"     data-target="conditions"      aria-label="Conditions"></button>
+    <button class="nav-dot"        data-label="RECOMMENDATIONS" data-target="recommendations" aria-label="Recommendations"></button>
+    <button class="nav-dot"        data-label="METRICS"        data-target="metrics"         aria-label="Metrics"></button>
+    <button class="nav-dot"        data-label="CONCLUSION"     data-target="conclusion"      aria-label="Conclusion"></button>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero-section" id="overview">
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="hero-badge">Strategic Case Study · Retail Distribution</p>
+      <h1 class="project-title">Uniqlo Indonesia</h1>
+      <p class="title-sub">Does Premium-Only Distribution Still Make Sense?</p>
+      
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="hero-meta-label">Market</div>
+          <div class="hero-meta-value">Indonesia</div>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-label">Years Active</div>
+          <div class="hero-meta-value">12 Years</div>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-label">Store Count</div>
+          <div class="hero-meta-value">77 Stores</div>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-label">Focus</div>
+          <div class="hero-meta-value">Distribution Strategy</div>
+        </div>
+        
+        <p class="case-study-byline">Case Study by <span>Mansi Uday Bhavsar</span></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="content-wrapper">
+
+    <!-- ═══ OPENING CARD ═══ -->
+    <div class="opening-card">
+      <div class="opening-card-inner">
+        <p class="oc-eyebrow">What This Is About</p>
+        <h2 class="oc-headline">Uniqlo says "Made for All." But 76 out of 77 Indonesian stores are in premium malls — the kind where Zara and Coach are your neighbors.</h2>
+        <p class="oc-body">That's a strange place to be for a brand built on accessible everyday clothing. This case study tries to figure out whether that's a mistake or a strategy. And honestly, I'm not sure it's entirely either one.</p>
+        <div class="oc-stats">
+          <div class="oc-stat">
+            <div class="oc-stat-num">48M</div>
+            <div class="oc-stat-lbl">Middle-class Indonesians</div>
+          </div>
+          <div class="oc-stat">
+            <div class="oc-stat-num">76/77</div>
+            <div class="oc-stat-lbl">Stores in premium malls</div>
+          </div>
+          <div class="oc-stat">
+            <div class="oc-stat-num">−9.5M</div>
+            <div class="oc-stat-lbl">Middle class since 2019</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PART 1: THE PARADOX ═══ -->
+    <section class="fade-in" id="paradox">
+      <p class="section-eyebrow">Part 1</p>
+      <h2 class="section-title">The Apparent <em>Paradox</em></h2>
+      <div class="paradox-wrap">
+        <table class="paradox-table" aria-label="What Uniqlo says vs. what consumers experience">
+          <thead>
+            <tr>
+              <th>What Uniqlo Says</th>
+              <th>What Consumers Experience</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>"Made for All"</td>
+              <td>Glass storefronts flanked by Zara, Coach, and Sephora</td>
+            </tr>
+            <tr>
+              <td>"LifeWear" — clothes for everyday life</td>
+              <td>Mannequins that look like fashion editorial shoots</td>
+            </tr>
+            <tr>
+              <td>Prices from IDR 150,000</td>
+              <td>76 out of 77 stores are in premium malls</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout" style="margin-top: clamp(30px,5vw,50px);">
+        <p class="callout-label">The Real Question</p>
+        <p>It's not "why hasn't Uniqlo expanded?" — it's "what does 12 years of consistency actually tell us about what they think is true?"</p>
+      </div>
+
+      <div class="prose" style="margin-top: clamp(24px,4vw,36px);">
+        <p>That gap between what the brand promises and what people actually experience isn't just a marketing problem. It's a barrier to purchase — not for the wealthy shoppers who already frequent these malls, but for the 48 million middle-class Indonesians who are, theoretically, the target customer.</p>
+        <p>A company this sophisticated doesn't accidentally stay in premium malls for over a decade. They either know something that makes this the right call — or they're stuck in a strategy that made sense when they entered and hasn't been questioned since. Both are worth taking seriously.</p>
+      </div>
+
+      <div class="stats-row" style="margin-top: clamp(36px,6vw,56px);">
+        <div class="stat-card">
+          <div class="stat-card-num">~48M</div>
+          <div class="stat-card-lbl">Middle-class Indonesians earn IDR 4–20M/month (World Bank)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num">1–3%</div>
+          <div class="stat-card-lbl">Of monthly income — what a Uniqlo purchase costs. Objectively affordable.</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num">−9.5M</div>
+          <div class="stat-card-lbl">Fewer middle-class consumers since 2019. The market is shrinking.</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num">1</div>
+          <div class="stat-card-lbl">Neighborhood store exists — in Tangerang, opened 2023. It hasn't scaled.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PART 2: HYPOTHESES ═══ -->
+    <section class="fade-in" id="hypotheses">
+      <p class="section-eyebrow">Part 2</p>
+      <h2 class="section-title">Two <em>Hypotheses</em></h2>
+      <div class="hyp-grid">
+        <div class="hyp-card">
+          <p class="hyp-label">Hypothesis A</p>
+          <h3 class="hyp-title">They're leaving money on the table</h3>
+          <p class="hyp-thesis">Uniqlo could be capturing a lot more volume — without sacrificing brand equity — if they expanded distribution and closed the perception gap.</p>
+          <ul class="hyp-points">
+            <li>H&M launched an official Shopee Mall store in November 2024. Erigo built their whole business on Shopee. Uniqlo is now the only major international fashion brand without any marketplace presence.</li>
+            <li>Shopee took 52% of Southeast Asia's e-commerce GMV in 2024. Apparel was the top category at 27.3%. Indonesian consumers have moved to digital — and Uniqlo isn't there.</li>
+            <li>The Tangerang store opened with local brand collabs (Indomie, Gojek, Tolak Angin) and actually felt community-based. It hasn't scaled — a tension that hasn't been resolved.</li>
+            <li>A shrinking middle class makes the "wait for them to come up" bet riskier every year. Patience becomes a liability.</li>
+          </ul>
+        </div>
+        <div class="hyp-card">
+          <p class="hyp-label">Hypothesis B</p>
+          <h3 class="hyp-title">They're playing the long game</h3>
+          <p class="hyp-thesis">Uniqlo's premium positioning is a deliberate investment — and expanding too fast could undermine the brand equity that makes the whole strategy work.</p>
+          <ul class="hyp-points">
+            <li>12 years is a long time to accidentally do the same thing. Fast Retailing has deep market intelligence across dozens of emerging markets.</li>
+            <li>77 well-run premium stores may generate better margins than 150+ mid-tier ones. Higher per-transaction value can absolutely be the smarter trade-off.</li>
+            <li>Indonesian consumers historically attach real social meaning to brands. Protecting premium perception now could enable higher-margin categories — homeware, accessories, collabs — later.</li>
+            <li>Instead of chasing a shrinking middle class downward, they might be betting on the cohort that will move up. Indonesia's GDP per capita is growing.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PART 3: CONDITIONS ═══ -->
+    <section class="fade-in" id="conditions">
+      <p class="section-eyebrow">Part 3</p>
+      <h2 class="section-title">What Would Need <em>to Be True</em></h2>
+      <div class="prose" style="margin-bottom: clamp(30px,5vw,48px);">
+        <p>The most useful question in any strategic analysis: not just "what's the evidence" but "what would need to be true for each side to be right?" It forces you to make the logic explicit rather than just picking the story you like.</p>
+      </div>
+      <div class="conditions-grid">
+        <div class="condition-block">
+          <p class="condition-block-title">If Hypothesis A is right —</p>
+          <ul class="condition-list">
+            <li>The Tangerang store would need to show strong economics: revenue per sqm, customer acquisition cost, repeat purchase rate. If it's already working, the only blocker is strategic conviction.</li>
+            <li>Shopee distribution would need to bring in genuinely new customers without meaningfully cannibalizing full-price store sales. If it's mostly the same people buying cheaper, that's a problem.</li>
+            <li>Brand dilution risk would need to be manageable — not zero, but manageable. H&M's Shopee entry suggests it might be.</li>
+            <li>The middle-class contraction would need to make "wait for upward mobility" a worse bet than "meet people where they are now." That's increasingly looking true.</li>
+          </ul>
+        </div>
+        <div class="condition-block">
+          <p class="condition-block-title">If Hypothesis B is right —</p>
+          <ul class="condition-list">
+            <li>The current 77 stores would already need to be highly profitable — enough that incremental volume from broader distribution doesn't move the needle meaningfully.</li>
+            <li>Brand dilution from broader distribution would need to cost more in lost future pricing power than it gains in near-term revenue.</li>
+            <li>Indonesia's GDP trajectory would need to support patience. If the middle class keeps shrinking, patience isn't rational.</li>
+            <li>Premium positioning would need to be a prerequisite — not just a nice-to-have — for expanding into lifestyle categories later. That's the bet that makes the whole strategy coherent.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PART 4: RECOMMENDATIONS ═══ -->
+    <section class="fade-in" id="recommendations">
+      <p class="section-eyebrow">Part 4</p>
+      <h2 class="section-title">What I Think, <em>and What I'd Do</em></h2>
+
+      <div class="prose" style="margin-bottom: clamp(30px,5vw,48px);">
+        <p>Based on what's publicly available, I think Uniqlo is probably leaving short-term revenue on the table — but not necessarily because they're making a mistake. They might just be making a bet that requires more patience than most outside observers have.</p>
+        <p>Three things push me toward Hypothesis A: H&M's Shopee entry shows channel expansion isn't automatically brand-destructive. The Tangerang store exists but hasn't scaled — and the silence around it is the most interesting signal in this whole analysis. A shrinking middle class makes the patience argument weaker every year.</p>
+      </div>
+
+      <div class="callout">
+        <p class="callout-label">Important Caveat</p>
+        <p>Uniqlo has internal data I don't — store-level profitability, customer lifetime value, brand perception tracking. Any of those could change this analysis significantly. What I'm proposing below are experiments, not fixes.</p>
+      </div>
+
+      <div class="recs" style="margin-top: clamp(36px,6vw,56px);">
+
+        <div class="rec-card">
+          <div class="rec-header">
+            <div class="rec-number">01</div>
+            <div class="rec-title-block">
+              <p class="rec-fix">What this fixes: the perception gap</p>
+              <h3 class="rec-title">Show real Indonesians in the marketing</h3>
+            </div>
+          </div>
+          <div class="rec-body">
+            <p>Right now, Uniqlo's Indonesian marketing looks like global campaigns with no local context. That's not a quality problem — it's a legibility problem. When someone in Depok sees a Uniqlo ad, nothing in it signals that this brand is for them.</p>
+            <p>The fix isn't about lowering the aesthetic. It's about changing the subject. Shoot new campaign content in Indonesia — feature real people across different occupations: students, teachers, Gojek drivers, warung owners — doing everyday things. Keep the production quality high. Just change who's in the frame.</p>
+            <p>H&M holds 17% market share in Indonesia in the exact same premium malls as Uniqlo, but consistently reads as more approachable. Same location, different perception. A big part of that is how they show up in marketing.</p>
+            <div class="rec-metric">
+              <p class="rec-metric-label">What to measure</p>
+              <p>% of middle-income Indonesians who describe Uniqlo as "affordable" or "for people like me" before and 6 months after launch. Foot traffic from non-mall areas. Social engagement on localized vs. global content.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="rec-card">
+          <div class="rec-header">
+            <div class="rec-number">02</div>
+            <div class="rec-title-block">
+              <p class="rec-fix">What this fixes: the digital gap</p>
+              <h3 class="rec-title">Launch RE.UNIQLO on Shopee</h3>
+            </div>
+          </div>
+          <div class="rec-body">
+            <p>Uniqlo's absence from Shopee isn't just a missed sales opportunity — it's increasingly a signal. Every competitor is there. Being the only major international fashion brand without marketplace presence starts to read as either very deliberate or very behind.</p>
+            <p>RE.UNIQLO — Uniqlo's sustainability resale program — is the cleanest entry point. The lower price points (IDR 50K–150K) are justified by the second-hand nature of the product, so they don't undermine the core pricing architecture. It creates a real entry point for first-time customers who wouldn't walk into Grand Indonesia, without touching the main brand.</p>
+            <p>Erigo's Shopee Live did IDR 5 billion in under 10 minutes. H&M uses its pre-loved channel as a discovery funnel. Uniqlo already has the RE.UNIQLO infrastructure — it just needs the distribution channel.</p>
+            <div class="rec-metric">
+              <p class="rec-metric-label">The risk to watch</p>
+              <p>Does this cannibalize full-price sales, or unlock genuinely new customers? Track overlap between Shopee buyers and existing store customers. If they're mostly different people, scale it. If they're the same people buying cheaper, pull back.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="rec-card">
+          <div class="rec-header">
+            <div class="rec-number">03</div>
+            <div class="rec-title-block">
+              <p class="rec-fix">What this fixes: the physical distribution gap</p>
+              <h3 class="rec-title">Pop-ups outside malls</h3>
+            </div>
+          </div>
+          <div class="rec-body">
+            <p>The bluntest version of the problem: you can't buy something you can't reach. 76 premium malls means Uniqlo is physically concentrated in places that pre-select for higher-income consumers. Everyone else has to decide to go out of their way.</p>
+            <p>A rolling pop-up series — university campuses, community centers outside Jakarta's premium belt, pasar modern spaces — gets LifeWear in front of people who need to experience it before they'll trust it. No permanent investment, no new store format to commit to, real data on whether demand exists.</p>
+            <p>The Tangerang store already proved Uniqlo can execute this format authentically. They know how to do community-based retail. The question is whether they have the conviction to test it at scale.</p>
+            <div class="rec-metric">
+              <p class="rec-metric-label">What to measure</p>
+              <p>Pop-up foot traffic vs. nearest mall store. First-time buyer rate. Geographic spread of new customer postcodes — are you actually reaching people who wouldn't otherwise come to Uniqlo?</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="margin-top: clamp(40px,6vw,60px);">
+        <p class="section-eyebrow" style="margin-bottom: 18px;">How these three things connect</p>
+        <div class="connection-row">
+          <div class="connection-item">
+            <p class="ci-action">Show real Indonesians</p>
+            <p class="ci-outcome">→ Change who people think Uniqlo is for</p>
+          </div>
+          <div class="connection-arrow">→</div>
+          <div class="connection-item">
+            <p class="ci-action">RE.UNIQLO on Shopee</p>
+            <p class="ci-outcome">→ Change where people can buy it</p>
+          </div>
+          <div class="connection-arrow">→</div>
+          <div class="connection-item">
+            <p class="ci-action">Pop-ups outside malls</p>
+            <p class="ci-outcome">→ Change where people discover it</p>
+          </div>
+        </div>
+        <div class="callout" style="margin-top: clamp(24px,4vw,36px);">
+          <p class="callout-label">The Goal</p>
+          <p>Together, these make "Made for All" feel true — not just sound true.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PART 5: METRICS ═══ -->
+    <section class="fade-in" id="metrics">
+      <p class="section-eyebrow">Part 5</p>
+      <h2 class="section-title">How I'd Know <em>If I'm Right</em></h2>
+      <div class="prose" style="margin-bottom: clamp(30px,5vw,48px);">
+        <p>The recommendations above are hypotheses. Here's what I'd track to know whether they're working — or whether Uniqlo's current strategy was right all along.</p>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-card-icon">📊</div>
+          <p class="metric-card-title">Store Economics</p>
+          <ul class="metric-list">
+            <li>Tangerang profitability vs. premium mall stores: revenue per sqm, customer acquisition cost, lifetime value</li>
+            <li>Do new customers from broader distribution become loyal, or do they churn? Retention at 6 and 12 months.</li>
+          </ul>
+        </div>
+        <div class="metric-card">
+          <div class="metric-card-icon">🧭</div>
+          <p class="metric-card-title">Brand Perception</p>
+          <ul class="metric-list">
+            <li>Quarterly surveys: does broader distribution hurt premium perception among existing customers?</li>
+            <li>Do people who discover Uniqlo via pop-ups or Shopee think of the brand differently than those from malls?</li>
+          </ul>
+        </div>
+        <div class="metric-card">
+          <div class="metric-card-icon">📦</div>
+          <p class="metric-card-title">Channel Performance</p>
+          <ul class="metric-list">
+            <li>RE.UNIQLO Shopee: are Shopee buyers and existing store customers the same people or different? That single number tells you whether this is a funnel or a cannibal.</li>
+            <li>Customer acquisition cost by channel: Shopee vs. pop-ups vs. stores.</li>
+          </ul>
+        </div>
+        <div class="metric-card">
+          <div class="metric-card-icon">📅</div>
+          <p class="metric-card-title">Cohort Behavior (12-month view)</p>
+          <ul class="metric-list">
+            <li>Do first-time buyers from pop-ups or Shopee come back to full-price stores within 12 months? If yes, these are acquisition funnels. If no, they're one-off discounted transactions.</li>
+            <li>Does localized marketing shift purchase intent among non-customers? A/B test by region.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ CONCLUSION ═══ -->
+    <section class="fade-in" id="conclusion">
+      <div class="conclusion-card">
+        <p class="conclusion-eyebrow">Conclusion</p>
+        <h2 class="conclusion-headline">Twelve years of strategic consistency from a sophisticated global operator isn't an accident.</h2>
+        <p class="conclusion-body">I started this analysis thinking the answer was obvious: Uniqlo says "Made for All" but only shows up in premium malls, and that's a problem they need to fix. The more I looked at it, the less obvious it felt. There's probably a real logic behind the premium strategy — store economics, brand equity protection, a bet on Indonesia's long-term upward mobility. Those aren't unreasonable positions.</p>
+        <p class="conclusion-body">But the shrinking middle class, the absence from Shopee, and the Tangerang store that hasn't scaled despite proving the concept — those are real tensions that deserve a real answer, not just patience.</p>
+        <p class="conclusion-body">My read: they're probably leaving short-term revenue on the table, and the window for their patient strategy is narrowing. The experiments above aren't about replacing their strategy. They're about testing whether the opportunity cost is as high as the external data suggests — and finding out before the market makes the decision for them.</p>
+        <div class="conclusion-final">
+          <p>The most important question in this case isn't "what should Uniqlo do?" — it's "what does the Tangerang store data actually say?" Everything else is speculation. That one data point would change the whole analysis.</p>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /content-wrapper -->
+
+  <script>
+    // ══ STARFIELD ══
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    let W = window.innerWidth, H = window.innerHeight;
+    let animId, stars = [], asteroid = null, asteroidTimer = 0;
+
+    function resize() {
+      W = window.innerWidth; H = window.innerHeight;
+      canvas.width = W; canvas.height = H;
+    }
+    resize();
+
+    class Star {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * W; this.y = Math.random() * H;
+        this.sz = Math.random() * 0.4 + 0.01;
+        this.br = Math.random() * 0.6 + 0.3;
+        this.tw = Math.random() * 0.12 + 0.004;
+        const cols = [{r:255,g:255,b:255},{r:200,g:220,b:255},{r:230,g:200,b:255},{r:255,g:240,b:200}];
+        this.color = cols[Math.floor(Math.random() * cols.length)];
+        this.rot = Math.random() * Math.PI * 2;
+      }
+      update() { this.br += this.tw; if (this.br > 1 || this.br < 0.2) this.tw *= -1; }
+      draw() {
+        const {r,g,b} = this.color, br = Math.max(0, Math.min(1, this.br));
+        const glow = ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.sz*4);
+        glow.addColorStop(0,`rgba(${r},${g},${b},${br*0.6})`);
+        glow.addColorStop(0.5,`rgba(${r},${g},${b},${br*0.2})`);
+        glow.addColorStop(1,`rgba(${r},${g},${b},0)`);
+        ctx.fillStyle = glow;
+        ctx.fillRect(this.x-this.sz*4,this.y-this.sz*4,this.sz*8,this.sz*8);
+        ctx.save(); ctx.translate(this.x,this.y); ctx.rotate(this.rot);
+        ctx.beginPath();
+        for (let i=0;i<4;i++) {
+          const a=(Math.PI/2)*i;
+          const x1=Math.cos(a)*this.sz*2, y1=Math.sin(a)*this.sz*2;
+          const x2=Math.cos(a+Math.PI/4)*this.sz*0.6, y2=Math.sin(a+Math.PI/4)*this.sz*0.6;
+          i===0?ctx.moveTo(x1,y1):ctx.lineTo(x1,y1); ctx.lineTo(x2,y2);
+        }
+        ctx.closePath(); ctx.fillStyle=`rgba(${r},${g},${b},${br})`; ctx.fill(); ctx.restore();
+      }
+    }
+
+    class Asteroid {
+      constructor() { this.reset(); }
+      reset() {
+        const lr = Math.random()<0.5, vy = H*(0.2+Math.random()*0.6);
+        this.x = lr?-50:W+50; this.y = vy;
+        const tx = lr?W+50:-50, ty = Math.max(0,Math.min(H,vy+H*0.3*(Math.random()<0.5?1:-1)));
+        const d = Math.hypot(tx-this.x,ty-this.y), sp = 3+Math.random()*2;
+        this.vx=(tx-this.x)/d*sp; this.vy=(ty-this.y)/d*sp;
+        this.size=2+Math.random()*3; this.rot=Math.random()*Math.PI*2;
+        this.rs=(Math.random()-0.5)*0.1; this.trail=[]; this.sh=0;
+      }
+      update() {
+        this.x+=this.vx; this.y+=this.vy; this.rot+=this.rs; this.sh+=0.08;
+        this.trail.push({x:this.x,y:this.y});
+        if(this.trail.length>30) this.trail.shift();
+        return !(this.x<-100||this.x>W+100||this.y<-100||this.y>H+100);
+      }
+      draw() {
+        this.trail.forEach((p,i)=>{
+          const a=(i/this.trail.length)*0.5, pr=i/this.trail.length;
+          const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,this.size*2.5);
+          g.addColorStop(0,`rgba(255,250,255,${a})`); g.addColorStop(1,'rgba(255,255,255,0)');
+          ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p.x,p.y,this.size*2*(pr+0.3),0,Math.PI*2); ctx.fill();
+        });
+        ctx.save(); ctx.translate(this.x,this.y); ctx.rotate(this.rot);
+        const og=ctx.createRadialGradient(0,0,0,0,0,this.size*3.5);
+        og.addColorStop(0,'rgba(255,255,255,0.35)'); og.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.fillStyle=og; ctx.beginPath(); ctx.arc(0,0,this.size*3.5,0,Math.PI*2); ctx.fill();
+        const gr=ctx.createRadialGradient(-this.size*0.3,-this.size*0.3,0,0,0,this.size*1.3);
+        gr.addColorStop(0,'#fff'); gr.addColorStop(1,'#f0f5fa');
+        ctx.beginPath();
+        for(let i=0;i<9;i++){
+          const a=(Math.PI*2/9)*i,v=0.75+Math.sin(this.sh*2+i)*0.12;
+          const x=Math.cos(a)*this.size*v,y=Math.sin(a)*this.size*v;
+          i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+        }
+        ctx.closePath(); ctx.fillStyle=gr; ctx.fill(); ctx.restore();
+      }
+    }
+
+    const cnt = W<768?180:380;
+    for(let i=0;i<cnt;i++) stars.push(new Star());
+
+    function animate() {
+      ctx.fillStyle='rgba(0,0,0,0.12)'; ctx.fillRect(0,0,W,H);
+      stars.forEach(s=>{s.update();s.draw();});
+      asteroidTimer++;
+      if(!asteroid&&asteroidTimer>600+Math.random()*600){asteroid=new Asteroid();asteroidTimer=0;}
+      if(asteroid){if(!asteroid.update())asteroid=null; else asteroid.draw();}
+      animId=requestAnimationFrame(animate);
+    }
+    animate();
+
+    let rt;
+    window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{resize();stars.forEach(s=>s.reset());},250);});
+    document.addEventListener('visibilitychange',()=>{document.hidden?cancelAnimationFrame(animId):animate();});
+
+    // ══ SCROLL FADE ══
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+    },{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+
+    // ══ NAV DOTS ══
+    const dots = document.querySelectorAll('.nav-dot');
+    const secs = document.querySelectorAll('section[id]');
+    dots.forEach(d=>{
+      d.tabIndex=0;
+      d.addEventListener('click',()=>{
+        const t=document.getElementById(d.dataset.target);
+        if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+      });
+      d.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();d.click();}});
+    });
+    let st;
+    window.addEventListener('scroll',()=>{
+      if(st)return;
+      st=setTimeout(()=>{
+        let cur='';
+        secs.forEach(s=>{if(window.pageYOffset>=s.offsetTop-220)cur=s.id;});
+        dots.forEach(d=>{d.classList.toggle('active',d.dataset.target===cur);});
+        st=null;
+      },100);
+    });
+  </script>
+</body>
+</html>

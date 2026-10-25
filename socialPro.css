@@ -1,0 +1,321 @@
+/* ===============================
+   SOCIAL PROJECTS PAGE - INSTAGRAM STYLE
+   Save as: social-projects.css
+================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+  background-color: #000;
+  overflow-x: hidden;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Starfield Background */
+#starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: #000;
+}
+
+/* ===============================
+   TOP NAVIGATION
+================================ */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 50px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.nav-icon {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-icon:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.nav-right {
+  display: flex;
+  gap: 35px;
+  align-items: center;
+}
+
+.nav-right a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  transition: opacity 0.3s ease;
+  position: relative;
+}
+
+.nav-right a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #fff;
+  transition: width 0.3s ease;
+}
+
+.nav-right a:hover::after {
+  width: 100%;
+}
+
+/* ===============================
+   PROFILE HEADER (Instagram-style)
+================================ */
+.profile-header {
+  padding: 120px 50px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.profile-container {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.profile-pic-wrapper {
+  flex-shrink: 0;
+}
+
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.profile-pic:hover {
+  border-color: #fff;
+  transform: scale(1.05);
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.profile-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1;
+  color: #fff;
+}
+
+.profile-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ===============================
+   INSTAGRAM GRID
+================================ */
+.projects-grid-section {
+  padding: 40px 50px 100px;
+  max-width: 1200px;
+  margin:  0 auto;
+}
+
+.instagram-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.grid-item {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.grid-item:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.grid-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease, filter 0.4s ease;
+  filter: grayscale(0.3) brightness(0.7);
+}
+
+.grid-item:hover img {
+  transform: scale(1.05);
+  filter: grayscale(0) brightness(0.5);
+}
+
+/* Overlay with project info */
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.7) 60%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 25px;
+  opacity: 1;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.grid-item:hover .grid-overlay {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.8) 50%,
+    rgba(0, 0, 0, 0.95) 100%
+  );
+}
+
+.grid-overlay h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.grid-overlay p {
+  font-size: 0.85rem;
+  font-weight: 300;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 900px) {
+  .instagram-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .profile-header {
+    padding: 100px 30px 50px;
+  }
+  
+  .projects-grid-section {
+    padding: 30px 30px 80px;
+  }
+  
+  .profile-pic {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 600px) {
+  .top-nav {
+    padding: 20px 25px;
+  }
+  
+  .nav-right {
+    gap: 20px;
+  }
+  
+  .nav-right a {
+    font-size: 11px;
+  }
+  
+  .profile-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 25px;
+  }
+  
+  .profile-header {
+    padding: 100px 20px 40px;
+  }
+  
+  .projects-grid-section {
+    padding: 20px 20px 60px;
+  }
+  
+  .instagram-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .grid-overlay {
+    padding: 20px;
+  }
+  
+  .grid-overlay h3 {
+    font-size: 1.1rem;
+  }
+  
+  .grid-overlay p {
+    font-size: 0.8rem;
+  }
+}

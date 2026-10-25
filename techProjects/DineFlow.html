@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DineFlow - Fast-Casual restaurant database management system managing customer orders, loyalty programs, and real-time kitchen operations">
+  <title>DineFlow | DBMS Project</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Space+Grotesk:wght@700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      color: #fff;
+      background-color: #000;
+      overflow-x: hidden;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Starfield Background */
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: #000;
+      will-change: transform;
+    }
+
+    /* Back Button */
+    .back-button {
+      position: fixed;
+      top: clamp(15px, 3vw, 30px);
+      left: clamp(15px, 3vw, 30px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      text-decoration: none;
+      font-size: clamp(11px, 1.5vw, 14px);
+      font-weight: 400;
+      letter-spacing: 1px;
+      padding: clamp(10px, 1.5vw, 12px) clamp(14px, 2.5vw, 20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .back-button:hover,
+    .back-button:focus {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(-5px);
+      outline: none;
+    }
+
+    .back-button svg {
+      width: clamp(14px, 2vw, 20px);
+      height: clamp(14px, 2vw, 20px);
+      flex-shrink: 0;
+    }
+
+    /* Quick Nav */
+    .quick-nav {
+      position: fixed;
+      right: clamp(20px, 4vw, 40px);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .nav-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-dot:hover,
+    .nav-dot:focus {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.2);
+      outline: 2px solid rgba(255, 255, 255, 0.3);
+      outline-offset: 2px;
+    }
+
+    .nav-dot.active {
+      background: #fff;
+      border-color: #fff;
+    }
+
+    .nav-dot::before {
+      content: attr(data-label);
+      position: absolute;
+      right: 25px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 11px;
+      letter-spacing: 1px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .nav-dot:hover::before {
+      opacity: 1;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      min-height: clamp(500px, 70vh, 800px);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: clamp(80px, 12vh, 120px) 20px clamp(40px, 8vh, 60px);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0.85) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+      letter-spacing: clamp(1.5px, 0.5vw, 3px);
+      text-transform: uppercase;
+      padding: clamp(6px, 1vw, 8px) clamp(12px, 2.5vw, 20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      margin-bottom: clamp(15px, 3vw, 25px);
+      border-radius: 30px;
+      line-height: 1.4;
+      max-width: 90vw;
+      word-wrap: break-word;
+    }
+
+    .project-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3rem, 12vw, 7rem);
+      font-weight: 800;
+      letter-spacing: clamp(-2px, -0.3vw, -3px);
+      line-height: 1.1;
+      margin-bottom: clamp(15px, 2.5vw, 20px);
+      background: linear-gradient(135deg, #fff 0%, #a0a0a0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      word-break: break-word;
+    }
+
+    .project-subtitle {
+      font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+      font-weight: 300;
+      opacity: 0.9;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Content Wrapper */
+    .content-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 clamp(20px, 4vw, 40px) clamp(60px, 10vw, 100px);
+    }
+
+    /* TL;DR Summary Card */
+    .tldr-section {
+      margin: clamp(-60px, -8vw, -80px) auto clamp(60px, 8vw, 80px);
+      max-width: 900px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .tldr-card {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      padding: clamp(30px, 5vw, 50px);
+      border-radius: 8px;
+    }
+
+    .tldr-header {
+      font-size: clamp(0.65rem, 1.2vw, 0.75rem);
+      letter-spacing: clamp(2px, 0.4vw, 3px);
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-bottom: clamp(20px, 3vw, 25px);
+    }
+
+    .tldr-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: clamp(30px, 5vw, 50px);
+      align-items: start;
+    }
+
+    .tldr-description h3 {
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      margin-bottom: clamp(15px, 2.5vw, 20px);
+      line-height: 1.3;
+    }
+
+    .tldr-description p {
+      font-size: clamp(0.9rem, 1.8vw, 1rem);
+      line-height: 1.7;
+      opacity: 0.85;
+      margin-bottom: 15px;
+    }
+
+    .tldr-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: clamp(15px, 3vw, 25px);
+    }
+
+    .tldr-stat {
+      text-align: center;
+      padding: clamp(15px, 2vw, 20px);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .tldr-stat-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .tldr-stat-label {
+      font-size: clamp(0.65rem, 1.2vw, 0.75rem);
+      opacity: 0.6;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .tldr-tech {
+      margin-top: clamp(25px, 4vw, 30px);
+      padding-top: clamp(25px, 4vw, 30px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: clamp(8px, 2vw, 15px);
+      flex-wrap: wrap;
+    }
+
+    .tech-label {
+      font-size: clamp(0.65rem, 1.2vw, 0.75rem);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    .tech-tag {
+      font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+      padding: clamp(5px, 1vw, 6px) clamp(10px, 2vw, 14px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Section Spacing */
+    section {
+      margin-bottom: clamp(60px, 10vw, 100px);
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: clamp(30px, 5vw, 50px);
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: clamp(20px, 3vw, 30px);
+    }
+
+    .feature-card {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: clamp(25px, 4vw, 35px);
+      background: rgba(255, 255, 255, 0.02);
+      transition: all 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .feature-card:hover,
+    .feature-card:focus-within {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-5px);
+    }
+
+    .feature-icon {
+      font-size: clamp(1.8rem, 3vw, 2rem);
+      margin-bottom: clamp(15px, 2.5vw, 20px);
+      opacity: 0.8;
+    }
+
+    .feature-card h3 {
+      font-size: clamp(1.1rem, 2vw, 1.2rem);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      font-size: clamp(0.85rem, 1.5vw, 0.9rem);
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+
+    /* Database Schema Section */
+    .schema-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: clamp(30px, 5vw, 40px);
+    }
+
+    .schema-diagram {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.02);
+      padding: clamp(20px, 3vw, 30px);
+      border-radius: 8px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .schema-diagram h3 {
+      font-size: clamp(1.1rem, 2vw, 1.2rem);
+      font-weight: 600;
+      margin-bottom: clamp(15px, 2.5vw, 20px);
+      text-align: center;
+    }
+
+    .diagram-placeholder {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      text-align: center;
+      opacity: 0.6;
+      padding: 15px;
+      overflow: hidden;
+    }
+
+    .diagram-placeholder img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      display: block;
+      object-fit: contain;
+    }
+
+    .diagram-placeholder p {
+      font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+      margin-top: 10px;
+      padding: 0 10px;
+    }
+
+    /* GitHub Section */
+    .github-section {
+      text-align: center;
+    }
+
+    .github-card {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.03);
+      padding: clamp(40px, 6vw, 50px);
+      border-radius: 8px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .github-card h3 {
+      font-size: clamp(1.3rem, 2.5vw, 1.5rem);
+      font-weight: 600;
+      margin-bottom: clamp(15px, 2.5vw, 20px);
+    }
+
+    .github-card p {
+      font-size: clamp(0.9rem, 1.8vw, 1rem);
+      opacity: 0.8;
+      margin-bottom: clamp(25px, 4vw, 30px);
+    }
+
+    .github-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: clamp(12px, 2vw, 15px) clamp(25px, 4vw, 35px);
+      border: 1px solid #fff;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      text-decoration: none;
+      font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+      font-weight: 500;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .github-button:hover,
+    .github-button:focus {
+      background: #fff;
+      color: #000;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+      outline: none;
+    }
+
+    .github-button svg {
+      width: clamp(20px, 3vw, 24px);
+      height: clamp(20px, 3vw, 24px);
+      flex-shrink: 0;
+    }
+
+    /* Fade-in animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Tablet Specific */
+    @media (min-width: 640px) {
+      .schema-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+      }
+    }
+
+    @media (min-width: 768px) {
+      .tldr-grid {
+        grid-template-columns: 2fr 1fr;
+      }
+
+      .tldr-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Desktop Specific */
+    @media (min-width: 1024px) {
+      .tldr-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Mobile Specific */
+    @media (max-width: 767px) {
+      .quick-nav {
+        display: none;
+      }
+
+      .hero-badge {
+        font-size: 0.55rem;
+        letter-spacing: 1px;
+        padding: 5px 10px;
+        line-height: 1.3;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Very Small Screens */
+    @media (max-width: 374px) {
+      .back-button {
+        font-size: 10px;
+        padding: 8px 12px;
+        gap: 6px;
+      }
+
+      .back-button svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .hero-badge {
+        font-size: 0.5rem;
+        padding: 4px 8px;
+      }
+
+      .tldr-stat-number {
+        font-size: 1.6rem;
+      }
+    }
+
+    /* Reduce motion for accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .fade-in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+      .back-button,
+      .feature-card,
+      .schema-diagram,
+      .github-card,
+      .tldr-card {
+        border-width: 2px;
+      }
+    }
+
+    /* Print styles */
+    @media print {
+      .back-button,
+      .quick-nav,
+      #starfield {
+        display: none;
+      }
+
+      body {
+        background: white;
+        color: black;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+
+  <!-- Back Button -->
+  <a href="../techPro.html" class="back-button" aria-label="Go back to home page">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    <span>BACK</span>
+  </a>
+
+  <!-- Quick Navigation -->
+  <nav class="quick-nav" aria-label="Quick navigation">
+    <button class="nav-dot active" data-label="OVERVIEW" data-target="overview" aria-label="Navigate to Overview section"></button>
+    <button class="nav-dot" data-label="FEATURES" data-target="features" aria-label="Navigate to Features section"></button>
+    <button class="nav-dot" data-label="SCHEMA" data-target="schema" aria-label="Navigate to Schema section"></button>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="overview">
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="hero-badge">DATABASE MANAGEMENT SYSTEM</p>
+      <h1 class="project-title">DineFlow</h1>
+      <p class="project-subtitle">Fast-Casual restaurant database management system managing customer orders, loyalty programs, and real-time kitchen operations</p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="content-wrapper">
+
+    <!-- TL;DR Summary Card -->
+    <section class="tldr-section">
+      <div class="tldr-card">
+        <p class="tldr-header">PROJECT OVERVIEW</p>
+        <div class="tldr-grid">
+          <div class="tldr-description">
+            <h3>A payment-first system with loyalty rewards and kitchen workflow management</h3>
+            <p>Designed and implemented a comprehensive database suitable for fast-casual restaurant operations. Handles order placement, payment processing, loyalty star system, and real-time kitchen order tracking with a 30-minute service level agreement.</p>
+          </div>
+          <div class="tldr-stats">
+            <div class="tldr-stat">
+              <div class="tldr-stat-number">11</div>
+              <div class="tldr-stat-label">Core Entities</div>
+            </div>
+            <div class="tldr-stat">
+              <div class="tldr-stat-number">30min</div>
+              <div class="tldr-stat-label">Order SLA</div>
+            </div>
+            <div class="tldr-stat">
+              <div class="tldr-stat-number">4</div>
+              <div class="tldr-stat-label">User Roles</div>
+            </div>
+            <div class="tldr-stat">
+              <div class="tldr-stat-number">ACID</div>
+              <div class="tldr-stat-label">Compliant</div>
+            </div>
+          </div>
+        </div>
+        <div class="tldr-tech">
+          <span class="tech-label">Tech Stack:</span>
+          <span class="tech-tag">MySQL</span>
+          <span class="tech-tag">ER Modeling</span>
+          <span class="tech-tag">Triggers</span>
+          <span class="tech-tag">Stored Procedures</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="features-section fade-in" id="features">
+      <h2 class="section-title">Key Components</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">📊</div>
+          <h3>ER Model & Schema</h3>
+          <p>11 core entities with proper relationships, cardinality constraints, and disjoint employee specialization (Cashier, Chef, Waiter, Manager).</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">⭐</div>
+          <h3>Loyalty System</h3>
+          <p>Star-based rewards with automatic discount tiers (10★=5%, 25★=10%, 50★=15%, 100★=20%). Audit trail for all star transactions.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🔄</div>
+          <h3>Order Workflow</h3>
+          <p>Complete lifecycle from PENDING → QUEUED → IN_PROCESS → COMPLETED → DELIVERED with 30-minute SLA tracking and alerts.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">💰</div>
+          <h3>Payment Processing</h3>
+          <p>Multi-method payment (Cash/Credit/Debit) with PCI-compliant storage, refund management requiring manager approval, and financial audit trail.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Database Schema -->
+    <section class="schema-section fade-in" id="schema">
+      <h2 class="section-title">Database Models</h2>
+      <div class="schema-grid">
+        <!-- Conceptual Data Model -->
+        <div class="schema-diagram">
+          <h3>Conceptual Data Model (CDM)</h3>
+          <div class="diagram-placeholder">
+            <img
+              src="../images/tech img/CDM Diagram - DineFlow.png"
+              alt="Conceptual Data Model Diagram showing core entities and their relationships"
+              loading="lazy"
+            />
+            <p>Conceptual Data Model illustrating core entities and their relationships.</p>
+          </div>
+        </div>
+
+        <!-- Physical Data Model -->
+        <div class="schema-diagram">
+          <h3>Physical Data Model (PDM)</h3>
+          <div class="diagram-placeholder">
+            <img
+              src="../images/tech img/PDM Diagram- DineFlow.png"
+              alt="Physical Data Model Diagram showing tables, primary keys, foreign keys, and constraints"
+              loading="lazy"
+            />
+            <p>Physical Data Model showing tables, primary keys, foreign keys, and constraints.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GitHub Section -->
+    <section class="github-section fade-in">
+      <div class="github-card">
+        <h3>View Complete Code & Documentation</h3>
+        <p>DDL scripts, triggers, procedures, HA configuration, and ER diagrams</p>
+        <a href="https://github.com/sea0ic/Dineflow-Database-Management-System-" class="github-button" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          View on GitHub
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // ========== STARFIELD WITH ASTEROIDS (Optimized) ==========
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    let canvasWidth = window.innerWidth;
+    let canvasHeight = window.innerHeight;
+    let animationFrameId;
+    let stars = [];
+    let asteroid = null;
+    let asteroidTimer = 0;
+
+    // Set canvas size
+    function resizeCanvas() {
+      canvasWidth = window.innerWidth;
+      canvasHeight = window.innerHeight;
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+    }
+
+    resizeCanvas();
+
+    // Star class
+    class Star {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * canvasWidth;
+        this.y = Math.random() * canvasHeight;
+        this.sz = Math.random() * 0.4 + 0.01;
+        this.br = Math.random() * 0.6 + 0.3;
+        this.tw = Math.random() * 0.15 + 0.005;
+        this.color = this.getPixieDustColor();
+        this.rotation = Math.random() * Math.PI * 2;
+      }
+
+      getPixieDustColor() {
+        const colors = [
+          { r: 255, g: 255, b: 255 },
+          { r: 200, g: 220, b: 255 },
+          { r: 230, g: 200, b: 255 },
+          { r: 255, g: 240, b: 200 }
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+
+      update() {
+        this.br += this.tw;
+        if (this.br > 1 || this.br < 0.2) this.tw *= -1;
+      }
+
+      drawStar(x, y, size, brightness) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(this.rotation);
+        ctx.beginPath();
+        for (let i = 0; i < 4; i++) {
+          const angle = (Math.PI / 2) * i;
+          const x1 = Math.cos(angle) * size;
+          const y1 = Math.sin(angle) * size;
+          const x2 = Math.cos(angle + Math.PI / 4) * (size * 0.3);
+          const y2 = Math.sin(angle + Math.PI / 4) * (size * 0.3);
+          if (i === 0) ctx.moveTo(x1, y1);
+          else ctx.lineTo(x1, y1);
+          ctx.lineTo(x2, y2);
+        }
+        ctx.closePath();
+        ctx.fillStyle = `rgba(${this.color.r},${this.color.g},${this.color.b},${brightness})`;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      draw() {
+        const glow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.sz * 4);
+        glow.addColorStop(0, `rgba(${this.color.r},${this.color.g},${this.color.b},${this.br * 0.6})`);
+        glow.addColorStop(0.5, `rgba(${this.color.r},${this.color.g},${this.color.b},${this.br * 0.2})`);
+        glow.addColorStop(1, `rgba(${this.color.r},${this.color.g},${this.color.b},0)`);
+        ctx.fillStyle = glow;
+        ctx.fillRect(this.x - this.sz * 4, this.y - this.sz * 4, this.sz * 8, this.sz * 8);
+        this.drawStar(this.x, this.y, this.sz * 2, Math.max(0, Math.min(1, this.br)));
+      }
+    }
+
+    // Asteroid class
+    class Asteroid {
+      constructor() {
+        this.reset();
+      }
+      
+      reset() {
+        const leftToRight = Math.random() < 0.5;
+        const verticalPos = canvasHeight * (0.2 + Math.random() * 0.6);
+        
+        if (leftToRight) {
+          this.x = -50;
+          this.y = verticalPos;
+          this.targetX = canvasWidth + 50;
+          this.targetY = verticalPos + (canvasHeight * 0.3) * (Math.random() < 0.5 ? 1 : -1);
+        } else {
+          this.x = canvasWidth + 50;
+          this.y = verticalPos;
+          this.targetX = -50;
+          this.targetY = verticalPos + (canvasHeight * 0.3) * (Math.random() < 0.5 ? 1 : -1);
+        }
+        
+        this.targetY = Math.max(0, Math.min(canvasHeight, this.targetY));
+        
+        const dx = this.targetX - this.x;
+        const dy = this.targetY - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        this.speed = 3 + Math.random() * 2;
+        this.vx = (dx / dist) * this.speed;
+        this.vy = (dy / dist) * this.speed;
+        
+        this.size = 2 + Math.random() * 3;
+        this.rotation = Math.random() * Math.PI * 2;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.1;
+        this.trail = [];
+        this.shimmer = 0;
+      }
+      
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.rotation += this.rotationSpeed;
+        this.shimmer += 0.08;
+        
+        this.trail.push({ x: this.x, y: this.y });
+        if (this.trail.length > 30) this.trail.shift();
+        
+        if (this.x < -100 || this.x > canvasWidth + 100 || 
+            this.y < -100 || this.y > canvasHeight + 100) {
+          return false;
+        }
+        return true;
+      }
+      
+      draw() {
+        this.trail.forEach((point, i) => {
+          const alpha = (i / this.trail.length) * 0.5;
+          const progress = i / this.trail.length;
+          
+          const r = 255;
+          const g = Math.floor(250 - progress * 10);
+          const b = Math.floor(255 - progress * 15);
+          
+          const glow = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, this.size * 2.5);
+          glow.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha})`);
+          glow.addColorStop(0.4, `rgba(240, 245, 255, ${alpha * 0.6})`);
+          glow.addColorStop(0.7, `rgba(255, 250, 240, ${alpha * 0.3})`);
+          glow.addColorStop(1, `rgba(255, 255, 255, 0)`);
+          
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, this.size * 2 * (progress + 0.3), 0, Math.PI * 2);
+          ctx.fill();
+        });
+        
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        
+        const outerGlow = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * 3.5);
+        outerGlow.addColorStop(0, `rgba(255, 255, 255, 0.4)`);
+        outerGlow.addColorStop(0.3, `rgba(245, 250, 255, 0.25)`);
+        outerGlow.addColorStop(0.6, `rgba(255, 252, 245, 0.15)`);
+        outerGlow.addColorStop(1, `rgba(255, 255, 255, 0)`);
+        ctx.fillStyle = outerGlow;
+        ctx.beginPath();
+        ctx.arc(0, 0, this.size * 3.5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        const gradient = ctx.createRadialGradient(-this.size * 0.3, -this.size * 0.3, 0, 0, 0, this.size * 1.3);
+        gradient.addColorStop(0, '#ffffff');
+        gradient.addColorStop(0.3, '#fafcff');
+        gradient.addColorStop(0.6, '#fffef8');
+        gradient.addColorStop(1, '#f0f5fa');
+        
+        ctx.beginPath();
+        const points = 9;
+        for (let i = 0; i < points; i++) {
+          const angle = (Math.PI * 2 / points) * i;
+          const variation = 0.75 + Math.sin(this.shimmer * 2 + i) * 0.12;
+          const radius = this.size * variation;
+          const x = Math.cos(angle) * radius;
+          const y = Math.sin(angle) * radius;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+        ctx.beginPath();
+        ctx.arc(this.size * 0.35, -this.size * 0.25, this.size * 0.2, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.fillStyle = 'rgba(240, 245, 255, 0.6)';
+        ctx.beginPath();
+        ctx.arc(-this.size * 0.2, this.size * 0.3, this.size * 0.12, 0, Math.PI * 2);
+        ctx.fill();
+        
+        const shimmerValue = Math.sin(this.shimmer) * 0.5 + 0.5;
+        const outlineR = Math.floor(200 + shimmerValue * 55);
+        const outlineG = Math.floor(220 + shimmerValue * 35);
+        const outlineB = 255;
+        ctx.strokeStyle = `rgba(${outlineR}, ${outlineG}, ${outlineB}, ${0.3 + shimmerValue * 0.2})`;
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+        
+        ctx.restore();
+      }
+    }
+
+    // Reduce star count on mobile for performance
+    const starCount = window.innerWidth < 768 ? 200 : 400;
+    for (let i = 0; i < starCount; i++) {
+      stars.push(new Star());
+    }
+
+    // Animation loop
+    function animate() {
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      
+      stars.forEach(s => { 
+        s.update(); 
+        s.draw(); 
+      });
+      
+      asteroidTimer++;
+      if (!asteroid && asteroidTimer > 600 + Math.random() * 600) {
+        asteroid = new Asteroid();
+        asteroidTimer = 0;
+      }
+      
+      if (asteroid) {
+        const stillActive = asteroid.update();
+        asteroid.draw();
+        if (!stillActive) {
+          asteroid = null;
+        }
+      }
+      
+      animationFrameId = requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Debounced resize handler
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        resizeCanvas();
+        stars.forEach(s => s.reset());
+      }, 250);
+    });
+
+    // Pause animation when tab is hidden (performance optimization)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animationFrameId);
+      } else {
+        animate();
+      }
+    });
+
+    // ========== SCROLL ANIMATIONS ==========
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in').forEach(el => {
+      observer.observe(el);
+    });
+
+    // ========== QUICK NAVIGATION ==========
+    const navDots = document.querySelectorAll('.nav-dot');
+    const sections = document.querySelectorAll('section[id]');
+
+    navDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const targetId = dot.getAttribute('data-target');
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Update active nav dot on scroll (throttled)
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+      if (scrollTimeout) return;
+      scrollTimeout = setTimeout(() => {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          if (window.pageYOffset >= sectionTop - 200) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navDots.forEach(dot => {
+          dot.classList.remove('active');
+          if (dot.getAttribute('data-target') === current) {
+            dot.classList.add('active');
+          }
+        });
+        scrollTimeout = null;
+      }, 100);
+    });
+
+    // ========== ACCESSIBILITY: Keyboard Navigation ==========
+    navDots.forEach((dot, index) => {
+      dot.setAttribute('tabindex', '0');
+      dot.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          dot.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sonderia | Social Project</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      color: #fff;
+      background-color: #000;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Starfield Background */
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: #000;
+    }
+
+    /* Back Button */
+    .back-button {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      padding: 12px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .back-button:hover {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(-5px);
+    }
+
+    .back-button svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Quick Nav */
+    .quick-nav {
+      position: fixed;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .nav-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-dot:hover {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-dot.active {
+      background: #fff;
+      border-color: #fff;
+    }
+
+    .nav-dot::before {
+      content: attr(data-label);
+      position: absolute;
+      right: 25px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 11px;
+      letter-spacing: 1px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .nav-dot:hover::before {
+      opacity: 1;
+    }
+
+    /* Hero Section - Condensed */
+    .hero-section {
+      height: 70vh;
+      min-height: 500px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.5);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.3) 40%,
+        rgba(0, 0, 0, 0.95) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 40px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      margin-bottom: 25px;
+      border-radius: 30px;
+    }
+
+    .project-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(4rem, 10vw, 7rem);
+      font-weight: 800;
+      letter-spacing: -3px;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+
+    .project-subtitle {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      font-weight: 300;
+      opacity: 0.9;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Content Wrapper */
+    .content-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px 100px;
+    }
+
+    /* TL;DR Summary Card - Front and Center */
+    .tldr-section {
+      margin: -80px auto 80px;
+      max-width: 900px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .tldr-card {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      padding: 50px;
+      border-radius: 8px;
+    }
+
+    .tldr-header {
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-bottom: 25px;
+    }
+
+    .tldr-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 50px;
+      align-items: start;
+    }
+
+    .tldr-description h3 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      margin-bottom: 20px;
+      line-height: 1.3;
+    }
+
+    .tldr-description p {
+      font-size: 1rem;
+      line-height: 1.7;
+      opacity: 0.85;
+      margin-bottom: 15px;
+    }
+
+    .tldr-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    .tldr-stat {
+      text-align: center;
+    }
+
+    .tldr-stat-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .tldr-stat-label {
+      font-size: 0.75rem;
+      opacity: 0.6;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .tldr-partners {
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .partner-label {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    .partner-tag {
+      font-size: 0.85rem;
+      padding: 6px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    /* About Section - Compact */
+    .about-section {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 60px;
+      margin-bottom: 100px;
+      align-items: center;
+    }
+
+    .about-text h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 25px;
+    }
+
+    .about-text p {
+      font-size: 1rem;
+      line-height: 1.8;
+      opacity: 0.85;
+      margin-bottom: 18px;
+    }
+
+    .about-image {
+      width: 100%;
+      height: 450px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    /* Timeline Section - Compact */
+    .timeline-section {
+      margin-bottom: 100px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 50px;
+    }
+
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .timeline-item {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.02);
+      transition: all 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .timeline-item:hover {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-5px);
+    }
+
+    .timeline-date {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      opacity: 0.6;
+      margin-bottom: 12px;
+    }
+
+    .timeline-item h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .timeline-item p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+
+    /* Photo Gallery - Compact Grid */
+    .gallery-section {
+      margin-bottom: 100px;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .photo-item {
+      aspect-ratio: 1;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .photo-item:hover {
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: scale(1.02);
+    }
+
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .photo-item:hover img {
+      transform: scale(1.1);
+    }
+
+    /* Testimonial Section */
+    .testimonial-section {
+      margin-bottom: 100px;
+      padding: 60px 80px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.03);
+      text-align: center;
+      border-radius: 4px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .testimonial-quote {
+      font-size: 1.4rem;
+      font-weight: 300;
+      line-height: 1.7;
+      font-style: italic;
+      margin-bottom: 25px;
+      opacity: 0.9;
+    }
+
+    .testimonial-author {
+      font-size: 0.9rem;
+      opacity: 0.6;
+      letter-spacing: 1px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .quick-nav {
+        display: none;
+      }
+
+      .tldr-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .tldr-stats {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .about-section {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .content-wrapper {
+        padding: 0 30px 80px;
+      }
+
+      .tldr-card {
+        padding: 40px 30px;
+      }
+
+      .photo-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .testimonial-section {
+        padding: 50px 40px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .back-button {
+        top: 20px;
+        left: 20px;
+        padding: 10px 16px;
+        font-size: 12px;
+      }
+
+      .hero-section {
+        height: 60vh;
+        min-height: 450px;
+      }
+
+      .content-wrapper {
+        padding: 0 20px 60px;
+      }
+
+      .tldr-section {
+        margin: -60px auto 60px;
+      }
+
+      .tldr-card {
+        padding: 30px 25px;
+      }
+
+      .tldr-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .tldr-stat-number {
+        font-size: 2rem;
+      }
+
+      .timeline-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .photo-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .testimonial-section {
+        padding: 40px 25px;
+      }
+
+      .testimonial-quote {
+        font-size: 1.1rem;
+      }
+    }
+
+    /* Fade-in animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+
+  <!-- Back Button -->
+  <a href="../socialPro.html" class="back-button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    BACK
+  </a>
+
+  <!-- Quick Navigation -->
+  <div class="quick-nav">
+    <div class="nav-dot active" data-label="OVERVIEW" data-target="overview"></div>
+    <div class="nav-dot" data-label="ABOUT" data-target="about"></div>
+    <div class="nav-dot" data-label="TIMELINE" data-target="timeline"></div>
+    <div class="nav-dot" data-label="GALLERY" data-target="gallery"></div>
+  </div>
+
+  <!-- Hero Section - Condensed -->
+  <section class="hero-section" id="overview">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-badge">UNESCO-APCEIU</p>
+      <p class="hero-badge">Biji-Biji Initiative</p>
+      <h1 class="project-title">Sonderia</h1>
+      <p class="project-subtitle">Empowering youth through cultural education and creative media</p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="content-wrapper">
+
+    <!-- TL;DR Summary Card -->
+    <section class="tldr-section">
+      <div class="tldr-card">
+        <p class="tldr-header">PROJECT SUMMARY</p>
+        <div class="tldr-grid">
+          <div class="tldr-description">
+            <h3>Bridging cultures through interactive education and creative expression</h3>
+            <p> Sonderia brought together young minds from diverse cultures to learn, share, and connect beyond borders. Through storytelling and cultural exchange, the project introduced children to empathy, inclusivity, and global citizenship from an early age.</p>
+          </div>
+          <div class="tldr-stats">
+            <div class="tldr-stat">
+              <div class="tldr-stat-number">134k+</div>
+              <div class="tldr-stat-label">People reached</div>
+            </div>
+            <div class="tldr-stat">
+              <div class="tldr-stat-number">18</div>
+              <div class="tldr-stat-label">Young Participants</div>
+            </div>
+            <div class="tldr-stat">
+              <div class="tldr-stat-number">6</div>
+              <div class="tldr-stat-label">Countries</div>
+            </div>
+            <div class="tldr-stat">
+              <div class="tldr-stat-number">2</div>
+              <div class="tldr-stat-label">Days Workshop</div>
+            </div>
+          </div>
+        </div>
+        <div class="tldr-partners">
+          <span class="partner-label">Partners:</span>
+          <span class="partner-tag">UNESCO APCEIU</span>
+          <span class="partner-tag">Biji-Biji Initiative</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section fade-in" id="about">
+      <div class="about-text">
+        <h2>The Story Behind Sonderia</h2>
+        <p> Sonderia comes from the word “sonder”—the realization that every person around us is living a life just as complex and meaningful as our own. <br> I created Sonderia with the vision of helping children understand this idea early on: that every person and every culture deserves appreciation and respect. The project was proposed during the 9th Youth Leadership Workshop, where it received a UNESCO grant, which supported the project financially. <br> Through Sonderia, we worked on two main goals—creating an animated film that teaches children about cultural diversity and inclusivity, and hosting a two-day virtual cultural exchange that brought together kids from different countries, cultures, and backgrounds.
+
+      </div>
+      <img src="../images/social img/sonderia/son3.png" alt="Sonderia Workshop" class="about-image">
+    </section>
+
+    <!-- Timeline -->
+    <section class="timeline-section fade-in" id="timeline">
+      <h2 class="section-title">Project Journey</h2>
+      <div class="timeline-grid">
+        <div class="timeline-item">
+          <p class="timeline-date">JUNE 2023</p>
+          <h3>Planning & Design</h3>
+          <p>secured UNESCO-APCEIU grant and laid the foundation for the project.</p>
+        </div>
+        <div class="timeline-item">
+          <p class="timeline-date">JULY 2023</p>
+          <h3>Production phase</h3>
+          <p>developed and produced the educational animated film.</p>
+        </div>
+        <div class="timeline-item">
+          <p class="timeline-date">AUGUST 2023</p>
+          <h3>Outreach and promotion</h3>
+          <p>released the film and marketed the upcoming virtual cultural exchange program.</p>
+        </div>
+        <div class="timeline-item">
+          <p class="timeline-date">OCTOBER 2023</p>
+          <h3>Program execution</h3>
+          <p>hosted a two-day virtual cultural exchange with children from diverse cultural backgrounds.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section class="gallery-section fade-in" id="gallery">
+      <h2 class="section-title">Moments From Our Journey</h2>
+      <div class="photo-grid">
+        <div class="photo-item">
+          <img src="../images/social img/sonderia/son10.png" alt="Workshop Activity 1">
+        </div>
+        <div class="photo-item">
+          <img src="../images/social img/sonderia/son12.png" alt="Cultural Exchange 1">
+        </div>
+        <div class="photo-item">
+          <img src="../images/social img/sonderia/son9.jpg" alt="Workshop Activity 2">
+        </div>
+        <div class="photo-item">
+          <img src="../images/social img/sonderia/son11.png" alt="Cultural Exchange 2">
+        </div>
+        <div class="photo-item">
+          <img src="../images/social img/sonderia/son8.png" alt="Workshop Activity 3">
+        </div>
+        <div class="photo-item">
+          <img src="../images/social img/sonderia/son1.png" alt="Cultural Exchange 3">
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonial -->
+     <section class="testimonial-section fade-in">
+  <p class="testimonial-quote">
+    The animated film produced as part of the Sonderia project.
+  </p>
+  <div class="testimonial-author">
+    <iframe 
+      width="100%"
+      height="315"
+      src="https://www.youtube.com/embed/8AZN4CmWCZ4"
+      title="Sonderia Animated Film"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+</section>
+  
+  <script>
+    // ========== STARFIELD ANIMATION ==========
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    let canvasWidth = window.innerWidth;
+    let canvasHeight = window.innerHeight;
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+
+    const stars = [];
+
+    class Star {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * canvasWidth;
+        this.y = Math.random() * canvasHeight;
+        this.sz = Math.random() * 0.4 + 0.01;
+        this.br = Math.random() * 0.6 + 0.3;
+        this.tw = Math.random() * 0.15 + 0.005;
+        this.color = this.getPixieDustColor();
+        this.rotation = Math.random() * Math.PI * 2;
+      }
+      getPixieDustColor() {
+        const colors = [
+          { r: 255, g: 255, b: 255 },
+          { r: 200, g: 220, b: 255 },
+          { r: 230, g: 200, b: 255 },
+          { r: 255, g: 240, b: 200 }
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+      update() {
+        this.br += this.tw;
+        if (this.br > 1 || this.br < 0.2) this.tw *= -1;
+      }
+      drawStar(x, y, size, brightness) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(this.rotation);
+        ctx.beginPath();
+        for (let i = 0; i < 4; i++) {
+          const angle = (Math.PI / 2) * i;
+          const x1 = Math.cos(angle) * size;
+          const y1 = Math.sin(angle) * size;
+          const x2 = Math.cos(angle + Math.PI / 4) * (size * 0.3);
+          const y2 = Math.sin(angle + Math.PI / 4) * (size * 0.3);
+          if (i === 0) ctx.moveTo(x1, y1);
+          else ctx.lineTo(x1, y1);
+          ctx.lineTo(x2, y2);
+        }
+        ctx.closePath();
+        ctx.fillStyle = `rgba(${this.color.r},${this.color.g},${this.color.b},${brightness})`;
+        ctx.fill();
+        ctx.restore();
+      }
+      draw() {
+        const glow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.sz * 4);
+        glow.addColorStop(0, `rgba(${this.color.r},${this.color.g},${this.color.b},${this.br * 0.6})`);
+        glow.addColorStop(0.5, `rgba(${this.color.r},${this.color.g},${this.color.b},${this.br * 0.2})`);
+        glow.addColorStop(1, `rgba(${this.color.r},${this.color.g},${this.color.b},0)`);
+        ctx.fillStyle = glow;
+        ctx.fillRect(this.x - this.sz * 4, this.y - this.sz * 4, this.sz * 8, this.sz * 8);
+        this.drawStar(this.x, this.y, this.sz * 2, Math.max(0, Math.min(1, this.br)));
+      }
+    }
+
+    for (let i = 0; i < 400; i++) stars.push(new Star());
+
+    function animate() {
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      stars.forEach(s => { s.update(); s.draw(); });
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvasWidth = window.innerWidth;
+      canvasHeight = window.innerHeight;
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+      stars.forEach(s => s.reset());
+    });
+
+    // ========== SCROLL ANIMATIONS ==========
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in').forEach(el => {
+      observer.observe(el);
+    });
+
+    // ========== QUICK NAVIGATION ==========
+    const navDots = document.querySelectorAll('.nav-dot');
+    const sections = document.querySelectorAll('section[id]');
+
+    navDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const targetId = dot.getAttribute('data-target');
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          targetSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Update active nav dot on scroll
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (window.pageYOffset >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navDots.forEach(dot => {
+        dot.classList.remove('active');
+        if (dot.getAttribute('data-target') === current) {
+          dot.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

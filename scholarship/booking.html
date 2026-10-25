@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Call · Mansi Bhavsar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0a0a0a;--white:#fafafa;--grey-1:#e8e8e8;--grey-2:#a0a0a0;--grey-3:#555;--border:rgba(255,255,255,0.1);--error:#f87171;--success:#86efac;--warn:#fbbf24}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--white);min-height:100vh;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.025;pointer-events:none;z-index:1000}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;z-index:0}
+
+.navbar{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:16px 40px;background:rgba(10,10,10,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.07)}
+.nav-logo{display:flex;align-items:center;gap:12px;font-weight:600;font-size:.9rem;color:var(--white);text-decoration:none}
+.nav-back{display:inline-flex;align-items:center;gap:7px;font-size:.82rem;color:var(--grey-2);text-decoration:none;font-weight:500;transition:color .2s}
+.nav-back:hover{color:var(--white)}
+.nav-back svg{width:16px;height:16px}
+
+.page{min-height:100vh;padding:100px 20px 60px;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
+
+.progress-wrap{display:flex;align-items:center;margin-bottom:48px;width:100%;max-width:560px}
+.progress-step{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative}
+.progress-step:not(:last-child)::after{content:'';position:absolute;top:16px;left:50%;width:100%;height:1px;background:rgba(255,255,255,.1);z-index:0}
+.progress-step.done:not(:last-child)::after{background:rgba(255,255,255,.4)}
+.step-circle{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.78rem;font-weight:800;color:var(--grey-2);position:relative;z-index:1;transition:all .3s ease}
+.progress-step.active .step-circle{border-color:var(--white);background:var(--white);color:var(--black)}
+.progress-step.done .step-circle{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.1);color:var(--white)}
+.step-label{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--grey-3);font-weight:500;white-space:nowrap;transition:color .3s}
+.progress-step.active .step-label{color:var(--grey-1)}
+.progress-step.done .step-label{color:var(--grey-2)}
+
+.card{width:100%;max-width:560px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);border-radius:12px;backdrop-filter:blur(16px);overflow:hidden}
+.card-header{padding:28px 32px 22px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:28px}
+.card-eyebrow{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--grey-3);margin-bottom:6px;font-weight:500}
+.card-title{font-family:'DM Serif Display',serif;font-size:1.5rem;font-weight:400;color:var(--white);letter-spacing:-.01em}
+.card-body{padding:0 32px 32px}
+
+.form-group{display:flex;flex-direction:column;gap:7px;margin-bottom:20px}
+.form-group label{font-size:.78rem;font-weight:600;color:var(--grey-1);letter-spacing:.02em}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:6px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s,background .2s;appearance:none}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--grey-3)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.07)}
+.form-group select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;cursor:pointer}
+.form-group select option{background:#1a1a1a;color:var(--white)}
+.form-group textarea{resize:vertical;min-height:110px;line-height:1.6}
+.form-group.has-error input,.form-group.has-error select,.form-group.has-error textarea{border-color:var(--error)}
+.error-msg{font-size:.72rem;color:var(--error);display:none}
+.form-group.has-error .error-msg{display:block}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 28px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.04em;cursor:pointer;border:none;transition:all .22s ease;text-decoration:none;position:relative;overflow:hidden}
+.btn svg{width:16px;height:16px;flex-shrink:0}
+.btn-primary{width:100%;background:linear-gradient(135deg,#fff 0%,#d4d4d4 100%);color:var(--black);box-shadow:0 0 18px rgba(255,255,255,.2),0 4px 20px rgba(255,255,255,.08)}
+.btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.5),transparent);animation:btnShine 2.4s ease-in-out infinite}
+@keyframes btnShine{0%{left:-100%}40%{left:130%}100%{left:130%}}
+.btn-primary:hover{box-shadow:0 0 28px rgba(255,255,255,.35),0 6px 30px rgba(255,255,255,.12);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-primary:disabled::before{animation:none}
+.btn-outline{background:transparent;color:var(--grey-2);border:1px solid rgba(255,255,255,.15);font-weight:500}
+.btn-outline:hover{border-color:rgba(255,255,255,.3);color:var(--white)}
+.btn-row{display:flex;gap:10px;margin-top:4px}
+.btn-row .btn-outline{flex-shrink:0;padding:14px 20px}
+.btn-row .btn-primary{flex:1}
+
+.step-panel{display:none}
+.step-panel.active{display:block}
+
+.calendly-wrap{width:100%;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.08);min-height:650px}
+.calendly-inline-widget{min-width:100%!important;height:650px!important}
+
+.slot-notice{display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);border-radius:8px;margin-bottom:16px;font-size:.78rem;color:var(--warn)}
+.slot-notice svg{width:16px;height:16px;flex-shrink:0}
+.slot-notice.done{background:rgba(134,239,172,.07);border-color:rgba(134,239,172,.25);color:var(--success)}
+
+/* ── PAYMENT SECTION ── */
+.payment-summary{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:20px 22px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+.payment-summary-label{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--grey-3);margin-bottom:4px}
+.payment-summary-title{font-size:.95rem;font-weight:600;color:var(--white)}
+.payment-summary-sub{font-size:.75rem;color:var(--grey-2);margin-top:2px}
+.payment-summary-price{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--white);letter-spacing:-.02em;line-height:1}
+.payment-summary-usd{font-size:.7rem;color:var(--grey-3);text-align:right;margin-top:3px}
+.payment-divider{text-align:center;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--grey-3);margin:16px 0;display:flex;align-items:center;gap:12px}
+.payment-divider::before,.payment-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
+
+/* Pay method buttons */
+.pay-btn{width:100%;padding:14px 20px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .22s ease;margin-bottom:10px;position:relative;overflow:hidden}
+.pay-btn svg{width:22px;height:22px;flex-shrink:0}
+.pay-btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important}
+
+.pay-btn-gpay{background:linear-gradient(135deg,#fff 0%,#e8e8e8 100%);color:#1a1a1a;box-shadow:0 0 16px rgba(255,255,255,.15)}
+.pay-btn-gpay:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 0 28px rgba(255,255,255,.25)}
+
+.pay-btn-razorpay{background:rgba(255,255,255,.06);color:var(--grey-2);border:1px solid rgba(255,255,255,.1)}
+/* razorpay disabled — no hover */
+
+.pay-btn-paypal{background:linear-gradient(135deg,#fff 0%,#e8e8e8 100%);color:#003087;box-shadow:0 0 16px rgba(255,255,255,.1)}
+.pay-btn-paypal:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 0 24px rgba(255,255,255,.2)}
+
+/* Coming soon pill */
+.coming-soon-pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);border-radius:20px;font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);margin-left:8px;vertical-align:middle}
+
+.pay-note{text-align:center;font-size:.7rem;color:var(--grey-3);margin-top:14px;line-height:1.6;display:flex;align-items:center;justify-content:center;gap:6px}
+.pay-note svg{width:13px;height:13px;flex-shrink:0}
+
+/* ── GPay QR Panel ── */
+.gpay-panel{display:none;flex-direction:column;align-items:center;gap:0;padding:4px 0 0}
+.gpay-panel.active{display:flex}
+
+.gpay-steps{width:100%;display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.gpay-step{display:flex;align-items:flex-start;gap:12px;font-size:.82rem;color:var(--grey-2);line-height:1.5}
+.gpay-step-num{width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:var(--grey-1);flex-shrink:0;margin-top:1px}
+
+.qr-box{background:white;border-radius:12px;padding:14px;margin-bottom:20px;display:flex;flex-direction:column;align-items:center;gap:10px;width:220px}
+.qr-img{width:192px;height:192px;object-fit:contain;display:block}
+.qr-label{font-size:.72rem;color:#333;font-weight:600;letter-spacing:.04em}
+
+/* UPI confirmation form */
+.gpay-confirm-form{width:100%}
+.gpay-confirm-form .form-group{margin-bottom:16px}
+.gpay-confirm-form label{font-size:.78rem;color:var(--grey-1);font-weight:600}
+.gpay-confirm-form input{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:6px;color:var(--white);padding:12px 14px;font-size:.88rem;width:100%;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s}
+.gpay-confirm-form input:focus{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.07)}
+.gpay-confirm-form input::placeholder{color:var(--grey-3)}
+.gpay-confirm-form .form-group.has-error input{border-color:var(--error)}
+
+/* ── Waiting overlay ── */
+.waiting-overlay{display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px 20px;text-align:center}
+.waiting-overlay.active{display:flex}
+.spinner{width:36px;height:36px;border:2px solid rgba(255,255,255,.1);border-top-color:var(--white);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.waiting-title{font-size:.95rem;font-weight:600;color:var(--white)}
+.waiting-sub{font-size:.78rem;color:var(--grey-2);line-height:1.6;max-width:320px}
+.waiting-actions{display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px}
+
+/* ── Success ── */
+.success-wrap{text-align:center;padding:20px 0 10px}
+.success-icon{width:64px;height:64px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:1.8rem}
+.success-title{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--white);margin-bottom:10px;letter-spacing:-.01em}
+.success-sub{font-size:.88rem;color:var(--grey-2);line-height:1.7;max-width:380px;margin:0 auto 28px}
+.success-details{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:18px 22px;text-align:left;margin-bottom:24px}
+.success-detail-row{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.success-detail-row:last-child{border-bottom:none}
+.success-detail-row span:first-child{color:var(--grey-2)}
+.success-detail-row span:last-child{color:var(--white);font-weight:600}
+
+.offer-pill{width:100%;max-width:560px;display:flex;align-items:center;gap:16px;padding:14px 20px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;margin-bottom:24px}
+.offer-pill-icon{font-size:1.2rem;flex-shrink:0}
+.offer-pill-text{flex:1}
+.offer-pill-text strong{font-size:.84rem;color:var(--white);font-weight:600;display:block;margin-bottom:2px}
+.offer-pill-text span{font-size:.72rem;color:var(--grey-2)}
+.offer-pill-price{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--white);letter-spacing:-.02em}
+
+@media(max-width:600px){
+  .navbar{padding:12px 16px}
+  .page{padding:80px 12px 40px}
+  .card-header{padding:20px 20px 18px}
+  .card-body{padding:0 20px 24px}
+  .step-label{display:none}
+  .btn-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="../index.html" class="nav-logo">
+    <span style="font-weight:500;font-size:.88rem;">Mansi Bhavsar</span>
+  </a>
+  <a href="consultation.html" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to home
+  </a>
+</nav>
+
+<div class="page">
+
+  <div class="offer-pill">
+    <div class="offer-pill-icon">🕐</div>
+    <div class="offer-pill-text">
+      <strong>1:1 Consultation · 40 Minutes</strong>
+      <span>Scholarship strategy, profile review, SOP guidance &amp; more</span>
+    </div>
+    <div class="offer-pill-price">₹550</div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-step active" id="ps-1"><div class="step-circle">1</div><div class="step-label">Your Details</div></div>
+    <div class="progress-step" id="ps-2"><div class="step-circle">2</div><div class="step-label">Choose Slot</div></div>
+    <div class="progress-step" id="ps-3"><div class="step-circle">3</div><div class="step-label">Payment</div></div>
+    <div class="progress-step" id="ps-4"><div class="step-circle">✓</div><div class="step-label">Confirmed</div></div>
+  </div>
+
+  <div class="card">
+
+    <!-- ══ STEP 1 ══ -->
+    <div class="step-panel active" id="step-1">
+      <div class="card-header">
+        <div class="card-eyebrow">Step 1 of 3</div>
+        <div class="card-title">Tell me about yourself</div>
+      </div>
+      <div class="card-body">
+        <form id="booking-form" novalidate>
+          <div class="form-group" id="fg-name">
+            <label for="inp-name">Full Name</label>
+            <input type="text" id="inp-name" placeholder="e.g. Priya Sharma" autocomplete="name">
+            <div class="error-msg">Please enter your name.</div>
+          </div>
+          <div class="form-group" id="fg-email">
+            <label for="inp-email">Email Address</label>
+            <input type="email" id="inp-email" placeholder="you@example.com" autocomplete="email">
+            <div class="error-msg">Please enter a valid email.</div>
+          </div>
+          <div class="form-group" id="fg-topic">
+            <label for="inp-topic">What do you need help with?</label>
+            <select id="inp-topic">
+              <option value="">Select a topic…</option>
+              <option value="scholarships">Scholarships &amp; Funding</option>
+              <option value="study-abroad">Study Abroad Planning</option>
+              <option value="applications">University Applications</option>
+              <option value="sop">SOP / Essays</option>
+              <option value="interview">Interview Preparation</option>
+              <option value="visa">Visa &amp; Documentation</option>
+              <option value="other">Something else</option>
+            </select>
+            <div class="error-msg">Please select a topic.</div>
+          </div>
+          <div class="form-group" id="fg-questions">
+            <label for="inp-questions">List your questions</label>
+            <textarea id="inp-questions" placeholder="e.g. Which scholarships are available for MSc CS in Germany? What are the deadlines?"></textarea>
+            <div class="error-msg">Please share at least one question.</div>
+          </div>
+          <button type="button" class="btn btn-primary" onclick="goToStep2()">
+            Next: Choose a Time Slot
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ══ STEP 2 ══ -->
+    <div class="step-panel" id="step-2">
+      <div class="card-header">
+        <div class="card-eyebrow">Step 2 of 3</div>
+        <div class="card-title">Pick a time that works</div>
+      </div>
+      <div class="card-body">
+        <div class="slot-notice" id="slot-notice">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="slot-notice-text">Select a date and time below. The "Next" button unlocks once your slot is confirmed.</span>
+        </div>
+        <div class="calendly-wrap">
+          <div class="calendly-inline-widget"
+            data-url="https://calendly.com/mansibhavsar-info/scholarship-consultation-session?hide_gdpr_banner=1&background_color=0a0a0a&text_color=fafafa&primary_color=ffffff"
+            style="min-width:100%;height:650px;"></div>
+        </div>
+        <div class="btn-row" style="margin-top:20px;">
+          <button class="btn btn-outline" onclick="goBackTo(1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back
+          </button>
+          <button class="btn btn-primary" id="btn-step2-next" disabled onclick="goToStep(3)">
+            Next: Payment
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+        <p style="font-size:.7rem;color:var(--grey-3);margin-top:10px;text-align:center">Button unlocks automatically after you schedule in the calendar above.</p>
+      </div>
+    </div>
+
+    <!-- ══ STEP 3 ══ -->
+    <div class="step-panel" id="step-3">
+      <div class="card-header">
+        <div class="card-eyebrow">Step 3 of 3</div>
+        <div class="card-title">Complete your payment</div>
+      </div>
+      <div class="card-body">
+
+        <!-- PAY OPTIONS VIEW -->
+        <div id="pay-options">
+          <div class="payment-summary">
+            <div>
+              <div class="payment-summary-label">You're booking</div>
+              <div class="payment-summary-title">1:1 Scholarship Consultation</div>
+              <div class="payment-summary-sub">40 minutes · with Mansi Bhavsar</div>
+            </div>
+            <div>
+              <div class="payment-summary-price">₹550</div>
+              <div class="payment-summary-usd">~$7 USD</div>
+            </div>
+          </div>
+
+          <!-- ── GPay QR (primary recommended) ── -->
+          <button class="pay-btn pay-btn-gpay" onclick="showGpayPanel()">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <text y="36" font-size="32" font-family="sans-serif">G</text>
+              <circle cx="36" cy="34" r="10" fill="#4285F4"/>
+              <text x="36" y="39" font-size="13" font-family="sans-serif" fill="white" text-anchor="middle">P</text>
+            </svg>
+            Pay ₹550 via GPay QR Code
+          </button>
+
+          <div class="payment-divider">other options</div>
+
+          <!-- ── Razorpay — disabled ── -->
+          <div style="position:relative">
+            <button class="pay-btn pay-btn-razorpay" disabled>
+              <svg viewBox="0 0 40 40" fill="none"><path d="M8 28L16 8l8 12-6 2 6 10H8z" fill="#555"/><path d="M16 8l8 12-6 2" fill="#777"/></svg>
+              Razorpay
+              <span class="coming-soon-pill">Coming soon</span>
+            </button>
+          </div>
+
+          <!-- ── PayPal ── -->
+          <button class="pay-btn pay-btn-paypal" onclick="openPayment('paypal')">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M7.5 19.5H5l2-12h5.5c2.5 0 4 1.2 3.5 3.5-.5 2.5-2.5 3.5-5 3.5H9L7.5 19.5z" fill="#003087"/><path d="M10 10.5H12c1.5 0 2.5-.8 2.8-2C15 7 14 6 12.5 6H10l-.8 4.5z" fill="#009cde"/></svg>
+            Pay $7 with PayPal
+          </button>
+
+          <div class="pay-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Secure payment · Do not close this tab while paying
+          </div>
+
+          <div class="btn-row" style="margin-top:20px;">
+            <button class="btn btn-outline" onclick="goBackTo(2)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              Back
+            </button>
+          </div>
+        </div>
+
+        <!-- GPay QR PANEL -->
+        <div class="gpay-panel" id="gpay-panel">
+          <div style="width:100%;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <div>
+              <div style="font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--grey-3);margin-bottom:4px">Pay via</div>
+              <div style="font-size:1.1rem;font-weight:700;color:var(--white)">Google Pay QR</div>
+            </div>
+            <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--white)">₹550</div>
+          </div>
+
+          <div class="gpay-steps">
+            <div class="gpay-step"><div class="gpay-step-num">1</div><span>Open Google Pay (or any UPI app) on your phone</span></div>
+            <div class="gpay-step"><div class="gpay-step-num">2</div><span>Tap <strong style="color:var(--white)">Scan QR</strong> and point at the code below</span></div>
+            <div class="gpay-step"><div class="gpay-step-num">3</div><span>Enter amount <strong style="color:var(--white)">₹550</strong> and complete the payment</span></div>
+            <div class="gpay-step"><div class="gpay-step-num">4</div><span>Come back here and fill in your UPI name below to confirm</span></div>
+          </div>
+
+          <!-- QR IMAGE — replace src with your actual GPay QR image path -->
+          <div class="qr-box">
+            <img
+              class="qr-img"
+              src="photos/gpay.jpeg"
+              alt="GPay QR code for ₹550 payment"
+              onerror="this.style.display='none';document.getElementById('qr-fallback').style.display='flex'"
+            >
+            <!-- Fallback if image path isn't set yet -->
+            <div id="qr-fallback" style="display:none;width:192px;height:192px;background:#f0f0f0;border-radius:8px;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h.01M18 14h.01M14 18h.01M18 18h.01M14 16h4"/></svg>
+              <span style="font-size:.65rem;color:#999;text-align:center;padding:0 10px">Replace src with your QR image path</span>
+            </div>
+            <div class="qr-label">Scan with any UPI app</div>
+          </div>
+
+          <!-- UPI name confirmation form -->
+          <div class="gpay-confirm-form" style="width:100%">
+            <div class="form-group" id="fg-upi-name">
+              <label for="inp-upi-name">Name shown on your UPI payment</label>
+              <input type="text" id="inp-upi-name" placeholder="e.g. Priya Sharma (as it appears in GPay)">
+              <div class="error-msg">Please enter the name used for payment.</div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="confirmGpayPayment()">
+              ✓ &nbsp;I've paid — Confirm Booking
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <button type="button" class="btn btn-outline" style="width:100%;margin-top:10px" onclick="showPayOptions()">
+            ← Choose a different payment method
+          </button>
+        </div>
+
+        <!-- PAYPAL WAITING STATE -->
+        <div class="waiting-overlay" id="pay-waiting">
+          <div class="spinner"></div>
+          <div class="waiting-title">Complete your PayPal payment</div>
+          <div class="waiting-sub">Your payment window has opened in a new tab. Complete the payment there, then come back here.</div>
+          <div class="waiting-actions">
+            <button class="btn btn-primary" onclick="confirmPaypalDone()">✓ &nbsp;I've completed payment</button>
+            <button class="btn btn-outline" onclick="reopenPayment()">Reopen payment window</button>
+            <button class="btn btn-outline" style="font-size:.78rem;opacity:.6" onclick="cancelWaiting()">← Choose a different method</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ STEP 4 ══ -->
+    <div class="step-panel" id="step-4">
+      <div class="card-body" style="padding-top:32px;">
+        <div class="success-wrap">
+          <div class="success-icon">✓</div>
+          <div class="success-title">You're all set!</div>
+          <p class="success-sub">Your consultation is booked. Check your email for the calendar invite and session details.</p>
+          <div class="success-details">
+            <div class="success-detail-row"><span>Name</span><span id="sc-name">—</span></div>
+            <div class="success-detail-row"><span>Email</span><span id="sc-email">—</span></div>
+            <div class="success-detail-row"><span>Topic</span><span id="sc-topic">—</span></div>
+            <div class="success-detail-row"><span>Slot</span><span id="sc-slot">—</span></div>
+            <div class="success-detail-row"><span>Duration</span><span>40 minutes</span></div>
+            <div class="success-detail-row"><span>Payment via</span><span id="sc-method">—</span></div>
+            <div class="success-detail-row"><span>Amount</span><span id="sc-amount">₹550</span></div>
+          </div>
+          <a href="index.html" class="btn btn-outline" style="width:100%;justify-content:center;">← Back to Home</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<script>
+let currentStep = 1;
+let slotConfirmed = false;
+let slotText = 'Scheduled via Calendly';
+let paymentWindow = null;
+
+const PAYPAL_LINK = 'https://paypal.me/mansiudaybhavsar/7';
+const TOPIC_MAP = {
+  'scholarships':'Scholarships & Funding','study-abroad':'Study Abroad Planning',
+  'applications':'University Applications','sop':'SOP / Essays',
+  'interview':'Interview Preparation','visa':'Visa & Documentation','other':'Other'
+};
+
+/* ── Progress ── */
+function activateStep(n) {
+  for (let i = 1; i <= 4; i++) {
+    const ps = document.getElementById('ps-' + i);
+    const sp = document.getElementById('step-' + i);
+    ps.classList.remove('active','done');
+    sp.classList.remove('active');
+    if (i < n) ps.classList.add('done');
+  }
+  document.getElementById('ps-' + n).classList.add('active');
+  document.getElementById('step-' + n).classList.add('active');
+  currentStep = n;
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+/* ── Step 1 → 2 ── */
+function goToStep2() {
+  let valid = true;
+  const checks = [
+    { id:'fg-name',      ok: () => !!document.getElementById('inp-name').value.trim() },
+    { id:'fg-email',     ok: () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('inp-email').value.trim()) },
+    { id:'fg-topic',     ok: () => !!document.getElementById('inp-topic').value },
+    { id:'fg-questions', ok: () => !!document.getElementById('inp-questions').value.trim() }
+  ];
+  checks.forEach(c => {
+    const ok = c.ok();
+    document.getElementById(c.id).classList.toggle('has-error', !ok);
+    if (!ok) valid = false;
+  });
+  if (valid) activateStep(2);
+}
+
+/* ── Calendly listener ── */
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.event === 'calendly.event_scheduled') {
+    slotConfirmed = true;
+    try {
+      const payload = e.data.payload;
+      if (payload && payload.event && payload.event.start_time) {
+        const d = new Date(payload.event.start_time);
+        slotText = d.toLocaleString('en-IN', { dateStyle:'medium', timeStyle:'short' });
+      }
+    } catch(_) {}
+    const notice = document.getElementById('slot-notice');
+    notice.classList.add('done');
+    document.getElementById('slot-notice-text').textContent = '✓ Slot confirmed! Click "Next: Payment" to proceed.';
+    document.getElementById('btn-step2-next').disabled = false;
+  }
+});
+
+/* ── Navigation ── */
+function goToStep(n)   { activateStep(n); }
+function goBackTo(n)   { activateStep(n); if (n === 3) showPayOptions(); }
+
+/* ── Payment view toggles ── */
+function showPayOptions() {
+  document.getElementById('pay-options').style.display = 'block';
+  document.getElementById('gpay-panel').classList.remove('active');
+  document.getElementById('pay-waiting').classList.remove('active');
+  paymentWindow = null;
+}
+
+function showGpayPanel() {
+  document.getElementById('pay-options').style.display = 'none';
+  document.getElementById('gpay-panel').classList.add('active');
+  document.getElementById('pay-waiting').classList.remove('active');
+}
+
+/* ── GPay confirmation ── */
+function confirmGpayPayment() {
+  const upiName = document.getElementById('inp-upi-name').value.trim();
+  const fg = document.getElementById('fg-upi-name');
+  if (!upiName) { fg.classList.add('has-error'); return; }
+  fg.classList.remove('has-error');
+  submitAndConfirm('GPay / UPI', '₹550', upiName);
+}
+
+/* ── PayPal flow ── */
+function openPayment() {
+  paymentWindow = window.open(PAYPAL_LINK, '_blank');
+  document.getElementById('pay-options').style.display = 'none';
+  document.getElementById('gpay-panel').classList.remove('active');
+  document.getElementById('pay-waiting').classList.add('active');
+}
+function reopenPayment() { paymentWindow = window.open(PAYPAL_LINK, '_blank'); }
+function cancelWaiting() { showPayOptions(); }
+function confirmPaypalDone() { submitAndConfirm('PayPal', '$7 USD', null); }
+
+/* ── Final submit ── */
+async function submitAndConfirm(method, amount, upiName) {
+  const name      = document.getElementById('inp-name').value.trim();
+  const email     = document.getElementById('inp-email').value.trim();
+  const topic     = document.getElementById('inp-topic').value;
+  const questions = document.getElementById('inp-questions').value.trim();
+
+  // Disable whichever confirm button triggered this
+  document.querySelectorAll('.btn-primary').forEach(b => { b.disabled = true; b.textContent = 'Confirming…'; });
+
+  const payload = { name, email, topic, questions, slot: slotText,
+    payment_method: method, amount, status: 'PAID — pending manual verification' };
+  if (upiName) payload.upi_sender_name = upiName;
+
+  try {
+    await fetch('https://formspree.io/f/mjgleqoa', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+    });
+  } catch(_) {}
+
+  // Populate success screen
+  document.getElementById('sc-name').textContent   = name;
+  document.getElementById('sc-email').textContent  = email;
+  document.getElementById('sc-topic').textContent  = TOPIC_MAP[topic] || topic;
+  document.getElementById('sc-slot').textContent   = slotText;
+  document.getElementById('sc-method').textContent = method;
+  document.getElementById('sc-amount').textContent = amount;
+
+  activateStep(4);
+  [1,2,3].forEach(n => {
+    document.getElementById('ps-'+n).classList.remove('active');
+    document.getElementById('ps-'+n).classList.add('done');
+  });
+}
+
+/* ── Clear validation errors ── */
+document.querySelectorAll('input, select, textarea').forEach(el => {
+  el.addEventListener('input', () => el.closest('.form-group')?.classList.remove('has-error'));
+});
+</script>
+</body>
+</html>
