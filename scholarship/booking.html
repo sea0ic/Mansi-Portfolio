@@ -85,6 +85,9 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .payment-summary-usd{font-size:.7rem;color:var(--grey-3);text-align:right;margin-top:3px}
 .payment-divider{text-align:center;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--grey-3);margin:16px 0;display:flex;align-items:center;gap:12px}
 .payment-divider::before,.payment-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
+#pay-options.locked{opacity:.4;pointer-events:none;user-select:none}
+.pay-lock-note{font-size:.74rem;color:var(--grey-2);text-align:center;margin-top:18px;padding:10px 14px;border:1px dashed rgba(255,255,255,.14);border-radius:8px}
+.pay-lock-note.hidden{display:none}
 
 /* Pay method buttons */
 .pay-btn{width:100%;padding:14px 20px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .22s ease;margin-bottom:10px;position:relative;overflow:hidden}
@@ -194,9 +197,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
   <div class="progress-wrap">
     <div class="progress-step active" id="ps-1"><div class="step-circle">1</div><div class="step-label">Your Details</div></div>
-    <div class="progress-step" id="ps-2"><div class="step-circle">2</div><div class="step-label">Choose Slot</div></div>
-    <div class="progress-step" id="ps-3"><div class="step-circle">3</div><div class="step-label">Payment</div></div>
-    <div class="progress-step" id="ps-4"><div class="step-circle">✓</div><div class="step-label">Confirmed</div></div>
+    <div class="progress-step" id="ps-2"><div class="step-circle">2</div><div class="step-label">Slot &amp; Payment</div></div>
+    <div class="progress-step" id="ps-3"><div class="step-circle">✓</div><div class="step-label">Confirmed</div></div>
   </div>
 
   <div class="card">
@@ -204,7 +206,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <!-- ══ STEP 1 ══ -->
     <div class="step-panel active" id="step-1">
       <div class="card-header">
-        <div class="card-eyebrow">Step 1 of 3</div>
+        <div class="card-eyebrow">Step 1 of 2</div>
         <div class="card-title">Tell me about yourself</div>
       </div>
       <div class="card-body">
@@ -239,7 +241,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
             <div class="error-msg">Please share at least one question.</div>
           </div>
           <button type="button" class="btn btn-primary" onclick="goToStep2()">
-            Next: Choose a Time Slot
+            Next: Pick a Slot &amp; Pay
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </button>
         </form>
@@ -249,13 +251,13 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <!-- ══ STEP 2 ══ -->
     <div class="step-panel" id="step-2">
       <div class="card-header">
-        <div class="card-eyebrow">Step 2 of 3</div>
-        <div class="card-title">Pick a time that works</div>
+        <div class="card-eyebrow">Step 2 of 2</div>
+        <div class="card-title">Pick a time and pay</div>
       </div>
       <div class="card-body">
         <div class="slot-notice" id="slot-notice">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <span id="slot-notice-text">Select a date and time below. The "Next" button unlocks once your slot is confirmed.</span>
+          <span id="slot-notice-text">Choose a time below, then pay ₹550 in the same step. Pick the slot first — payment unlocks once it's selected.</span>
         </div>
         <div class="calendly-wrap">
           <div class="calendly-inline-widget"
@@ -267,25 +269,12 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             Back
           </button>
-          <button class="btn btn-primary" id="btn-step2-next" disabled onclick="goToStep(3)">
-            Next: Payment
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
         </div>
-        <p style="font-size:.7rem;color:var(--grey-3);margin-top:10px;text-align:center">Button unlocks automatically after you schedule in the calendar above.</p>
-      </div>
-    </div>
 
-    <!-- ══ STEP 3 ══ -->
-    <div class="step-panel" id="step-3">
-      <div class="card-header">
-        <div class="card-eyebrow">Step 3 of 3</div>
-        <div class="card-title">Complete your payment</div>
-      </div>
-      <div class="card-body">
+        <p class="pay-lock-note" id="pay-lock-note">Pick a time above to unlock payment.</p>
 
         <!-- PAY OPTIONS VIEW -->
-        <div id="pay-options">
+        <div id="pay-options" class="locked">
           <div class="payment-summary">
             <div>
               <div class="payment-summary-label">You're booking</div>
@@ -328,13 +317,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
           <div class="pay-note">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             Secure payment · Do not close this tab while paying
-          </div>
-
-          <div class="btn-row" style="margin-top:20px;">
-            <button class="btn btn-outline" onclick="goBackTo(2)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-              Back
-            </button>
           </div>
         </div>
 
@@ -411,8 +393,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       </div>
     </div>
 
-    <!-- ══ STEP 4 ══ -->
-    <div class="step-panel" id="step-4">
+    <!-- ══ STEP 3 (success) ══ -->
+    <div class="step-panel" id="step-3">
       <div class="card-body" style="padding-top:32px;">
         <div class="success-wrap">
           <div class="success-icon">✓</div>
@@ -454,7 +436,7 @@ const TOPIC_MAP = {
 
 /* ── Progress ── */
 function activateStep(n) {
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 3; i++) {
     const ps = document.getElementById('ps-' + i);
     const sp = document.getElementById('step-' + i);
     ps.classList.remove('active','done');
@@ -497,14 +479,15 @@ window.addEventListener('message', function(e) {
     } catch(_) {}
     const notice = document.getElementById('slot-notice');
     notice.classList.add('done');
-    document.getElementById('slot-notice-text').textContent = '✓ Slot confirmed! Click "Next: Payment" to proceed.';
-    document.getElementById('btn-step2-next').disabled = false;
+    document.getElementById('slot-notice-text').textContent = '✓ Slot selected. Now pay ₹550 below to finish your booking.';
+    document.getElementById('pay-options').classList.remove('locked');
+    document.getElementById('pay-lock-note').classList.add('hidden');
+    document.getElementById('pay-options').scrollIntoView({ behavior:'smooth', block:'start' });
   }
 });
 
 /* ── Navigation ── */
-function goToStep(n)   { activateStep(n); }
-function goBackTo(n)   { activateStep(n); if (n === 3) showPayOptions(); }
+function goBackTo(n) { activateStep(n); showPayOptions(); }
 
 /* ── Payment view toggles ── */
 function showPayOptions() {
@@ -587,8 +570,8 @@ async function submitAndConfirm(method, amount, upiName) {
   document.getElementById('sc-method').textContent = method;
   document.getElementById('sc-amount').textContent = amount;
 
-  activateStep(4);
-  [1,2,3].forEach(n => {
+  activateStep(3);
+  [1,2].forEach(n => {
     document.getElementById('ps-'+n).classList.remove('active');
     document.getElementById('ps-'+n).classList.add('done');
   });
