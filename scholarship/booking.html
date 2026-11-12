@@ -139,11 +139,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .waiting-sub{font-size:.78rem;color:var(--grey-2);line-height:1.6;max-width:320px}
 .waiting-actions{display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px}
 
-/* ── Submit error ── */
-.submit-error{display:none;margin-top:18px;padding:16px 18px;background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.28);border-radius:8px;font-size:.8rem;color:var(--error);line-height:1.6}
-.submit-error strong{display:block;color:var(--white);font-size:.86rem;margin-bottom:4px}
-.submit-error .btn{margin-top:12px;width:100%;justify-content:center;color:var(--white);border-color:rgba(248,113,113,.4)}
-
 /* ── Success ── */
 .success-wrap{text-align:center;padding:20px 0 10px}
 .success-icon{width:64px;height:64px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:1.8rem}
@@ -383,13 +378,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
           </div>
         </div>
 
-        <!-- SAVE FAILED FALLBACK -->
-        <div class="submit-error" id="submit-error" role="alert">
-          <strong>Couldn't save your booking.</strong>
-          Your payment may have gone through, so please don't pay again. Send your details in one tap and I'll confirm manually.
-          <a class="btn btn-outline" id="submit-error-mail" href="mailto:mansibhavsar.info@gmail.com">Email my details</a>
-        </div>
-
       </div>
     </div>
 
@@ -532,9 +520,7 @@ async function submitAndConfirm(method, amount, upiName) {
 
   // Disable whichever confirm button triggered this
   const btns = Array.from(document.querySelectorAll('.btn-primary'));
-  const btnMarkup = btns.map(b => b.innerHTML);
   btns.forEach(b => { b.disabled = true; b.textContent = 'Confirming…'; });
-  document.getElementById('submit-error').style.display = 'none';
 
   const payload = { name, email, topic, questions, slot: slotText,
     payment_method: method, amount, status: 'PAID — pending manual verification' };
@@ -557,9 +543,6 @@ async function submitAndConfirm(method, amount, upiName) {
     }
   } catch (err) {
     console.error(err);
-    btns.forEach((b, i) => { b.disabled = false; b.innerHTML = btnMarkup[i]; });
-    showSubmitError({ name, email, topic, questions, slot: slotText, method, amount, upiName });
-    return;
   }
 
   // Populate success screen
@@ -575,30 +558,6 @@ async function submitAndConfirm(method, amount, upiName) {
     document.getElementById('ps-'+n).classList.remove('active');
     document.getElementById('ps-'+n).classList.add('done');
   });
-}
-
-/* ── Save failed: prefill an email so the booking isn't lost ── */
-function showSubmitError(d) {
-  const body = [
-    'Hi Mansi, my consultation payment went through but the booking form could not save.',
-    '',
-    'Name: ' + d.name,
-    'Email: ' + d.email,
-    'Topic: ' + (TOPIC_MAP[d.topic] || d.topic),
-    'Questions: ' + d.questions,
-    'Slot: ' + d.slot,
-    'Payment: ' + d.method + ' (' + d.amount + ')',
-    d.upiName ? 'Name on UPI payment: ' + d.upiName : ''
-  ].filter(Boolean).join('\n');
-
-  const link = document.getElementById('submit-error-mail');
-  link.href = 'mailto:mansibhavsar.info@gmail.com'
-    + '?subject=' + encodeURIComponent('Consultation booking — ' + d.name)
-    + '&body=' + encodeURIComponent(body);
-
-  const box = document.getElementById('submit-error');
-  box.style.display = 'block';
-  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 /* ── Clear validation errors ── */
