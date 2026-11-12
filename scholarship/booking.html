@@ -127,6 +127,22 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .gpay-confirm-form input::placeholder{color:var(--grey-3)}
 .gpay-confirm-form .form-group.has-error input{border-color:var(--error)}
 
+/* ── Proof of payment panel ── */
+.proof-panel{display:none;flex-direction:column;gap:0;padding:4px 0 0}
+.proof-panel.active{display:flex}
+.proof-summary{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:14px 18px;margin-bottom:20px}
+.proof-summary-method{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--grey-3);margin-bottom:3px}
+.proof-summary-title{font-size:.92rem;font-weight:600;color:var(--white)}
+.proof-summary-amount{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--white)}
+.file-drop{display:flex;flex-direction:column;align-items:center;gap:6px;padding:24px 16px;border:1px dashed rgba(255,255,255,.22);border-radius:8px;background:rgba(255,255,255,.03);cursor:pointer;text-align:center;transition:border-color .2s,background .2s}
+.file-drop:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.05)}
+.file-drop svg{width:24px;height:24px;color:var(--grey-2)}
+.file-drop-text{font-size:.8rem;color:var(--grey-1);font-weight:600}
+.file-drop-sub{font-size:.68rem;color:var(--grey-3)}
+.file-drop input{display:none}
+.file-name{display:none;font-size:.74rem;color:var(--success);margin-top:8px;word-break:break-all}
+.proof-note{font-size:.7rem;color:var(--grey-3);line-height:1.6;margin-top:12px;text-align:center}
+
 /* ── Waiting overlay ── */
 .waiting-overlay{display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px 20px;text-align:center}
 .waiting-overlay.active{display:flex}
@@ -196,7 +212,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="progress-step active" id="ps-1"><div class="step-circle">1</div><div class="step-label">Your Details</div></div>
     <div class="progress-step" id="ps-2"><div class="step-circle">2</div><div class="step-label">Choose Slot</div></div>
     <div class="progress-step" id="ps-3"><div class="step-circle">3</div><div class="step-label">Payment</div></div>
-    <div class="progress-step" id="ps-4"><div class="step-circle">✓</div><div class="step-label">Confirmed</div></div>
+    <div class="progress-step" id="ps-4"><div class="step-circle">✓</div><div class="step-label">Submitted</div></div>
   </div>
 
   <div class="card">
@@ -255,7 +271,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <div class="card-body">
         <div class="slot-notice" id="slot-notice">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <span id="slot-notice-text">Select a date and time below. The "Next" button unlocks once your slot is confirmed.</span>
+          <span id="slot-notice-text">Pick a date and time below. This holds your slot as a request — it is only confirmed after your payment proof is uploaded and verified.</span>
         </div>
         <div class="calendly-wrap">
           <div class="calendly-inline-widget"
@@ -272,7 +288,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </button>
         </div>
-        <p style="font-size:.7rem;color:var(--grey-3);margin-top:10px;text-align:center">Button unlocks automatically after you schedule in the calendar above.</p>
+        <p style="font-size:.7rem;color:var(--grey-3);margin-top:10px;text-align:center">Button unlocks automatically after you schedule in the calendar above. Your slot is requested now, not confirmed.</p>
       </div>
     </div>
 
@@ -352,7 +368,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
             <div class="gpay-step"><div class="gpay-step-num">1</div><span>Open Google Pay (or any UPI app) on your phone</span></div>
             <div class="gpay-step"><div class="gpay-step-num">2</div><span>Tap <strong style="color:var(--white)">Scan QR</strong> and point at the code below</span></div>
             <div class="gpay-step"><div class="gpay-step-num">3</div><span>Enter amount <strong style="color:var(--white)">₹550</strong> and complete the payment</span></div>
-            <div class="gpay-step"><div class="gpay-step-num">4</div><span>Come back here and fill in your UPI name below to confirm</span></div>
+            <div class="gpay-step"><div class="gpay-step-num">4</div><span>Come back here, then upload a screenshot of the payment receipt</span></div>
           </div>
 
           <!-- QR IMAGE — replace src with your actual GPay QR image path -->
@@ -371,15 +387,10 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
             <div class="qr-label">Scan with any UPI app</div>
           </div>
 
-          <!-- UPI name confirmation form -->
+          <!-- Next: upload payment proof -->
           <div class="gpay-confirm-form" style="width:100%">
-            <div class="form-group" id="fg-upi-name">
-              <label for="inp-upi-name">Name shown on your UPI payment</label>
-              <input type="text" id="inp-upi-name" placeholder="e.g. Priya Sharma (as it appears in GPay)">
-              <div class="error-msg">Please enter the name used for payment.</div>
-            </div>
-            <button type="button" class="btn btn-primary" onclick="confirmGpayPayment()">
-              ✓ &nbsp;I've paid — Confirm Booking
+            <button type="button" class="btn btn-primary" onclick="openProofPanel('GPay / UPI', '₹550')">
+              ✓ &nbsp;I've paid — Upload Proof
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
           </div>
@@ -395,16 +406,60 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
           <div class="waiting-title">Complete your PayPal payment</div>
           <div class="waiting-sub">Your payment window has opened in a new tab. Complete the payment there, then come back here.</div>
           <div class="waiting-actions">
-            <button class="btn btn-primary" onclick="confirmPaypalDone()">✓ &nbsp;I've completed payment</button>
+            <button class="btn btn-primary" onclick="openProofPanel('PayPal', '$7 USD')">✓ &nbsp;I've completed payment</button>
             <button class="btn btn-outline" onclick="reopenPayment()">Reopen payment window</button>
             <button class="btn btn-outline" style="font-size:.78rem;opacity:.6" onclick="cancelWaiting()">← Choose a different method</button>
           </div>
         </div>
 
+        <!-- PROOF OF PAYMENT PANEL -->
+        <div class="proof-panel" id="proof-panel">
+          <div class="proof-summary">
+            <div>
+              <div class="proof-summary-method">Paid via</div>
+              <div class="proof-summary-title" id="proof-method">—</div>
+            </div>
+            <div class="proof-summary-amount" id="proof-amount">—</div>
+          </div>
+
+          <div class="form-group" id="fg-pay-name">
+            <label for="inp-pay-name" id="proof-pay-label">Name shown on your UPI payment</label>
+            <input type="text" id="inp-pay-name" placeholder="e.g. Priya Sharma">
+            <div class="error-msg">Please enter the name used for the payment.</div>
+          </div>
+
+          <div class="form-group" id="fg-proof">
+            <label>Payment proof <span style="color:var(--error)">*</span></label>
+            <label class="file-drop" for="inp-proof">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5-5 5 5"/><path d="M12 5v11"/></svg>
+              <span class="file-drop-text">Upload payment screenshot</span>
+              <span class="file-drop-sub">JPG, PNG, WEBP or PDF · max 5 MB</span>
+              <input type="file" id="inp-proof" accept="image/png,image/jpeg,image/webp,application/pdf" onchange="showProofFileName()">
+            </label>
+            <div class="file-name" id="proof-file-name"></div>
+            <div class="error-msg" id="proof-file-error">Please attach your payment screenshot.</div>
+          </div>
+
+          <div class="form-group" id="fg-txn-ref">
+            <label for="inp-txn-ref">Transaction / UTR reference <span style="color:var(--grey-3);font-weight:400">(optional)</span></label>
+            <input type="text" id="inp-txn-ref" placeholder="e.g. 4289XXXXXX1234">
+          </div>
+
+          <button type="button" class="btn btn-primary" id="btn-submit-booking" onclick="submitWithProof()">
+            Submit booking
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <p class="proof-note">Your booking is saved only once your payment proof is uploaded. I'll verify the payment and email your slot confirmation.</p>
+
+          <button type="button" class="btn btn-outline" style="width:100%;margin-top:10px" onclick="showPayOptions()">
+            ← Choose a different payment method
+          </button>
+        </div>
+
         <!-- SAVE FAILED FALLBACK -->
         <div class="submit-error" id="submit-error" role="alert">
-          <strong>Couldn't save your booking.</strong>
-          Your payment may have gone through, so please don't pay again. Send your details in one tap and I'll confirm manually.
+          <strong>Couldn't submit your booking.</strong>
+          <span id="submit-error-msg">Please don't pay again — send your details in one tap and I'll confirm manually.</span>
           <a class="btn btn-outline" id="submit-error-mail" href="mailto:mansibhavsar.info@gmail.com">Email my details</a>
         </div>
 
@@ -416,8 +471,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <div class="card-body" style="padding-top:32px;">
         <div class="success-wrap">
           <div class="success-icon">✓</div>
-          <div class="success-title">You're all set!</div>
-          <p class="success-sub">Your consultation is booked. Check your email for the calendar invite and session details.</p>
+          <div class="success-title">Payment proof received</div>
+          <p class="success-sub">Your slot is held, not confirmed yet. I'll verify your payment and email your confirmation — usually within 24 hours. Nothing else is needed from you.</p>
           <div class="success-details">
             <div class="success-detail-row"><span>Name</span><span id="sc-name">—</span></div>
             <div class="success-detail-row"><span>Email</span><span id="sc-email">—</span></div>
@@ -426,6 +481,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
             <div class="success-detail-row"><span>Duration</span><span>40 minutes</span></div>
             <div class="success-detail-row"><span>Payment via</span><span id="sc-method">—</span></div>
             <div class="success-detail-row"><span>Amount</span><span id="sc-amount">₹550</span></div>
+            <div class="success-detail-row"><span>Status</span><span>Awaiting verification</span></div>
           </div>
           <a href="index.html" class="btn btn-outline" style="width:100%;justify-content:center;">← Back to Home</a>
         </div>
@@ -441,11 +497,16 @@ let currentStep = 1;
 let slotConfirmed = false;
 let slotText = 'Scheduled via Calendly';
 let paymentWindow = null;
+let paymentMethod = '';
+let paymentAmount = '';
 
 const PAYPAL_LINK = 'https://paypal.me/mansiudaybhavsar/7';
 const SUPABASE_URL = 'https://qnczndylxlefckxhyowb.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_Uy_X75rpF9AT2Bkj5Qf8mQ_MZ9c5Aak';
 const BOOKINGS_TABLE = 'consultation_requests';
+const PROOF_BUCKET = 'payment-proofs';
+const MAX_PROOF_BYTES = 5 * 1024 * 1024;
+const PENDING_STATUS = 'AWAITING PAYMENT VERIFICATION';
 const TOPIC_MAP = {
   'scholarships':'Scholarships & Funding','study-abroad':'Study Abroad Planning',
   'applications':'University Applications','sop':'SOP / Essays',
@@ -511,22 +572,18 @@ function showPayOptions() {
   document.getElementById('pay-options').style.display = 'block';
   document.getElementById('gpay-panel').classList.remove('active');
   document.getElementById('pay-waiting').classList.remove('active');
+  document.getElementById('proof-panel').classList.remove('active');
+  document.getElementById('submit-error').style.display = 'none';
   paymentWindow = null;
+  paymentMethod = '';
+  paymentAmount = '';
 }
 
 function showGpayPanel() {
   document.getElementById('pay-options').style.display = 'none';
   document.getElementById('gpay-panel').classList.add('active');
   document.getElementById('pay-waiting').classList.remove('active');
-}
-
-/* ── GPay confirmation ── */
-function confirmGpayPayment() {
-  const upiName = document.getElementById('inp-upi-name').value.trim();
-  const fg = document.getElementById('fg-upi-name');
-  if (!upiName) { fg.classList.add('has-error'); return; }
-  fg.classList.remove('has-error');
-  submitAndConfirm('GPay / UPI', '₹550', upiName);
+  document.getElementById('proof-panel').classList.remove('active');
 }
 
 /* ── PayPal flow ── */
@@ -534,28 +591,101 @@ function openPayment() {
   paymentWindow = window.open(PAYPAL_LINK, '_blank');
   document.getElementById('pay-options').style.display = 'none';
   document.getElementById('gpay-panel').classList.remove('active');
+  document.getElementById('proof-panel').classList.remove('active');
   document.getElementById('pay-waiting').classList.add('active');
 }
 function reopenPayment() { paymentWindow = window.open(PAYPAL_LINK, '_blank'); }
 function cancelWaiting() { showPayOptions(); }
-function confirmPaypalDone() { submitAndConfirm('PayPal', '$7 USD', null); }
 
-/* ── Final submit ── */
-async function submitAndConfirm(method, amount, upiName) {
+/* ── Proof of payment ── */
+function openProofPanel(method, amount) {
+  paymentMethod = method;
+  paymentAmount = amount;
+
+  document.getElementById('proof-method').textContent = method;
+  document.getElementById('proof-amount').textContent = amount;
+  document.getElementById('proof-pay-label').textContent =
+    method === 'PayPal' ? 'Name / email on your PayPal payment' : 'Name shown on your UPI payment';
+  document.getElementById('inp-pay-name').placeholder =
+    method === 'PayPal' ? 'e.g. Priya Sharma' : 'e.g. Priya Sharma (as it appears in GPay)';
+
+  document.getElementById('pay-options').style.display = 'none';
+  document.getElementById('gpay-panel').classList.remove('active');
+  document.getElementById('pay-waiting').classList.remove('active');
+  document.getElementById('proof-panel').classList.add('active');
+  document.getElementById('submit-error').style.display = 'none';
+  document.getElementById('proof-panel').scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+function showProofFileName() {
+  const file = document.getElementById('inp-proof').files[0];
+  const nameEl = document.getElementById('proof-file-name');
+  const errEl = document.getElementById('proof-file-error');
+  document.getElementById('fg-proof').classList.remove('has-error');
+
+  if (!file) {
+    nameEl.style.display = 'none';
+    return;
+  }
+  if (file.size > MAX_PROOF_BYTES) {
+    errEl.textContent = 'That file is larger than 5 MB. Please choose a smaller image.';
+    document.getElementById('fg-proof').classList.add('has-error');
+    nameEl.style.display = 'none';
+    return;
+  }
+  errEl.textContent = 'Please attach your payment screenshot.';
+  nameEl.textContent = 'Attached: ' + file.name;
+  nameEl.style.display = 'block';
+}
+
+/* ── Final submit — uploads proof, then saves the booking ── */
+async function submitWithProof() {
   const name      = document.getElementById('inp-name').value.trim();
   const email     = document.getElementById('inp-email').value.trim();
   const topic     = document.getElementById('inp-topic').value;
   const questions = document.getElementById('inp-questions').value.trim();
+  const payName   = document.getElementById('inp-pay-name').value.trim();
+  const txnRef    = document.getElementById('inp-txn-ref').value.trim();
+  const file      = document.getElementById('inp-proof').files[0];
 
-  // Disable whichever confirm button triggered this
-  const btns = Array.from(document.querySelectorAll('.btn-primary'));
-  const btnMarkup = btns.map(b => b.innerHTML);
-  btns.forEach(b => { b.disabled = true; b.textContent = 'Confirming…'; });
+  const fgName = document.getElementById('fg-pay-name');
+  const fgProof = document.getElementById('fg-proof');
+  fgName.classList.toggle('has-error', !payName);
+  fgProof.classList.toggle('has-error', !file);
+  if (!payName || !file) return;
+  if (file.size > MAX_PROOF_BYTES) {
+    document.getElementById('proof-file-error').textContent = 'That file is larger than 5 MB. Please choose a smaller image.';
+    fgProof.classList.add('has-error');
+    return;
+  }
+
+  const btn = document.getElementById('btn-submit-booking');
+  const btnMarkup = btn.innerHTML;
+  btn.disabled = true;
+  btn.textContent = 'Uploading proof…';
   document.getElementById('submit-error').style.display = 'none';
 
+  const detail = { name, email, topic, questions, slot: slotText,
+    method: paymentMethod, amount: paymentAmount, payName };
+
+  let proofPath = '';
+  try {
+    proofPath = await uploadProof(file);
+  } catch (err) {
+    console.error(err);
+    btn.disabled = false;
+    btn.innerHTML = btnMarkup;
+    showSubmitError(detail, 'upload');
+    return;
+  }
+
+  btn.textContent = 'Saving booking…';
+
   const payload = { name, email, topic, questions, slot: slotText,
-    payment_method: method, amount, status: 'PAID — pending manual verification' };
-  if (upiName) payload.upi_sender_name = upiName;
+    payment_method: paymentMethod, amount: paymentAmount,
+    payment_proof_path: proofPath, status: PENDING_STATUS };
+  if (payName) payload.payer_name = payName;
+  if (txnRef) payload.payment_reference = txnRef;
 
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${BOOKINGS_TABLE}`, {
@@ -569,13 +699,14 @@ async function submitAndConfirm(method, amount, upiName) {
       body: JSON.stringify(payload)
     });
     if (!res.ok) {
-      const detail = await res.text().catch(() => '');
-      throw new Error(`Save failed: ${res.status} ${detail}`);
+      const body = await res.text().catch(() => '');
+      throw new Error(`Save failed: ${res.status} ${body}`);
     }
   } catch (err) {
     console.error(err);
-    btns.forEach((b, i) => { b.disabled = false; b.innerHTML = btnMarkup[i]; });
-    showSubmitError({ name, email, topic, questions, slot: slotText, method, amount, upiName });
+    btn.disabled = false;
+    btn.innerHTML = btnMarkup;
+    showSubmitError(detail, 'save');
     return;
   }
 
@@ -584,8 +715,8 @@ async function submitAndConfirm(method, amount, upiName) {
   document.getElementById('sc-email').textContent  = email;
   document.getElementById('sc-topic').textContent  = TOPIC_MAP[topic] || topic;
   document.getElementById('sc-slot').textContent   = slotText;
-  document.getElementById('sc-method').textContent = method;
-  document.getElementById('sc-amount').textContent = amount;
+  document.getElementById('sc-method').textContent = paymentMethod;
+  document.getElementById('sc-amount').textContent = paymentAmount;
 
   activateStep(4);
   [1,2,3].forEach(n => {
@@ -594,8 +725,40 @@ async function submitAndConfirm(method, amount, upiName) {
   });
 }
 
+/* ── Upload the payment screenshot to Supabase Storage ── */
+async function uploadProof(file) {
+  const rawExt = (file.name.split('.').pop() || 'jpg').toLowerCase();
+  const ext = rawExt.replace(/[^a-z0-9]/g, '') || 'jpg';
+  const id = (window.crypto && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : Date.now() + '-' + Math.random().toString(36).slice(2);
+  const path = id + '.' + ext;
+
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${PROOF_BUCKET}/${path}`, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      'Content-Type': file.type || 'application/octet-stream',
+      'x-upsert': 'false'
+    },
+    body: file
+  });
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(`Proof upload failed: ${res.status} ${body}`);
+  }
+  return path;
+}
+
 /* ── Save failed: prefill an email so the booking isn't lost ── */
-function showSubmitError(d) {
+function showSubmitError(d, stage) {
+  const head = stage === 'upload'
+    ? 'Your payment proof could not be uploaded. Your payment may have gone through, so please don\'t pay again — email me the screenshot instead.'
+    : 'Your booking could not be saved, but your payment proof was received. Please don\'t pay again — email me and I\'ll confirm manually.';
+  document.getElementById('submit-error-msg').textContent = head;
+
   const body = [
     'Hi Mansi, my consultation payment went through but the booking form could not save.',
     '',
@@ -605,7 +768,8 @@ function showSubmitError(d) {
     'Questions: ' + d.questions,
     'Slot: ' + d.slot,
     'Payment: ' + d.method + ' (' + d.amount + ')',
-    d.upiName ? 'Name on UPI payment: ' + d.upiName : ''
+    d.payName ? 'Name on payment: ' + d.payName : '',
+    'Payment proof: I will attach my screenshot to this email.'
   ].filter(Boolean).join('\n');
 
   const link = document.getElementById('submit-error-mail');
