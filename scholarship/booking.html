@@ -416,6 +416,7 @@ const PAYPAL_LINK = 'https://paypal.me/mansiudaybhavsar/7';
 const SUPABASE_URL = 'https://qnczndylxlefckxhyowb.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_Uy_X75rpF9AT2Bkj5Qf8mQ_MZ9c5Aak';
 const BOOKINGS_TABLE = 'consultation_requests';
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mjgleqoa';
 const TOPIC_MAP = {
   'scholarships':'Scholarships & Funding','study-abroad':'Study Abroad Planning',
   'applications':'University Applications','sop':'SOP / Essays',
@@ -525,6 +526,25 @@ async function submitAndConfirm(method, amount, upiName) {
   const payload = { name, email, topic, questions, slot: slotText,
     payment_method: method, amount, status: 'PAID — pending manual verification' };
   if (upiName) payload.upi_sender_name = upiName;
+
+  // Email notification (Formspree) — independent of the database save
+  const notify = {
+    name, email, questions,
+    topic: TOPIC_MAP[topic] || topic,
+    slot: slotText || 'not selected',
+    payment_method: method,
+    amount,
+    _subject: `New consultation booking — ${name}`
+  };
+  if (upiName) notify.upi_sender_name = upiName;
+  fetch(FORMSPREE_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(notify)
+  }).then(r => {
+    if (!r.ok) console.error('Email notification failed:', r.status);
+    else console.log('Email notification sent');
+  }).catch(err => console.error('Email notification failed', err));
 
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${BOOKINGS_TABLE}`, {
